@@ -1,0 +1,61 @@
+@charset "utf-8"; 
+* {    
+	padding: 0;    
+	margin: 0;
+ }/* 清除浮动 */
+.clearfix:after {    
+	content: "";    
+	display: table;    
+	clear: both;
+}
+html, body {    
+	height: 100%;
+}
+body {   
+	 font-family: "Microsoft YaHei";    
+	 background: #E1E1E1;    
+	 font-weight: 300;    
+	 font-size: 15px;    
+	 color: #333;    
+	 overflow: hidden;
+}
+a {    
+	text-decoration: none;
+}/*按钮 阴影无扩展 */
+.button, .button2 {    
+	float: left;    
+    margin: 2rem auto;    
+    cursor: pointer;    
+    height: 100px;    
+    width: 100px;    
+    display: block;    
+    position: relative;    
+    color: black;    
+    text-align: center;    
+    border-radius: 50px;   
+    padding:30px 0 !important;
+    box-shadow: 2px 2px 4px rgba(0,0,0,0.4);    
+    background: #FFF;    
+    transition: all 0.5s ease-in;
+ }
+.button {    
+	float: left;
+	 border:5px solid #FCC366;
+ }
+.button2 {    
+	float: right;
+	 border:5px solid #89C997;
+}
+.time{
+	color: #000000;
+	font-size: 20px; 
+	margin:0 !important;
+	line-height:24px
+}
+.work{
+	color: #000000;
+	font-size: 13px; 
+	margin:0 !important;
+	line-height:34px
+}
+ 

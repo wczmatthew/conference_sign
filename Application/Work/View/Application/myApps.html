@@ -1,0 +1,80 @@
+<head>
+	<script type='text/javascript' src='__PUBLIC__/js/countUp.min.js'></script>
+	<link rel='stylesheet' href='__PUBLIC__/css/light7.css' />
+	<script type='text/javascript'>
+		$(document).ready(function() {
+			var actTab = $('.buttons-tab').find(".active");
+			$('.buttons-tab').find('.tab-link').each(function(){
+				$(this).click(function(){
+					if(actTab != this) {
+						$(this).parent().find(".active").removeClass("active");
+						$(this).addClass('active');
+						actTab = $('.buttons-tab').find(".active");
+						$("#p_time").val($(this).text());
+					}
+					
+				});
+			});
+		});
+	</script>
+	<style type="text/css">
+	.icon-left {
+		color: white;
+	}
+	.my-title {
+		position: relative;
+		left: 2.2rem; 
+		top: -2.8rem; 
+		font-size: 0.85rem;
+		color: white; 
+		font-weight: 500;
+		line-height: 2.2rem;
+		font-family: Microsoft YaHei, Arial, Helvetica, sans-serif;
+	}
+	.my-nav-right-btn {
+		position: relative;
+		top: -5.6rem;
+		right: 0rem;
+		color: white;
+	}
+	.card {
+		font-family: Microsoft YaHei, Arial, Helvetica, sans-serif;
+	}
+	</style>
+</head>
+<body>
+	<div class="page page-current">
+	  <header class="bar bar-nav bar-primary" style="background-color: #0C61AD;">
+	  	<div ><i class="icon icon-left" onclick="javascript:window.history.back();" style=""></i></div>
+	    <h1 class="my-title" style="">{:C('GOBACK_NAME')}</h1>
+	    <div class="my-nav-right-btn"><i class="icon iconfont pull-right icon-edit" onclick="javascript:window.location.href='{:U("Work/Application/addApp", array("arg1" => $arg1, "arg2" => $arg2))}'"></i></div>
+	  </header>
+	  <div class="content">
+	 	<foreach name="my_apps" item="app">
+  	 	<div class="card">
+  	 		<php>$cur_time = date('Y-m-d H:i:s', time());</php>
+		    <div class="card-header">
+		    	<span>
+		    	<if condition="$app['approve_status'] eq 1">
+		    		<if condition="$cur_time lt $app['start_time']"><span style="color:{:C('APP_OBJ_STATUS_ORDER')};">未开始</span>
+		    		<elseif condition="$cur_time gt $app['start_time'] AND $cur_time lt $app['end_time']"/><span style="color:{:C('APP_OBJ_STATUS_GO')};">进行中</span>
+		    		<elseif condition="$cur_time gt $app['end_time']"/><span style="color:{:C('APP_OBJ_STATUS_END')};">已结束</span>
+		    		</if>
+		    	<else/><span style="color:{:C('APP_OBJ_STATUS_UNAPPROVE')};">未审批</span>
+		    	</if>-{$app['title']}
+		    	</span>
+		    	<if condition="$app['approve_status'] neq 1"><span><a href="{:U('Work/Application/editApp', array('arg1' => $arg1, 'arg2' => $arg2, 'appid' => $app['application_id']))}">修改</a></span></if>
+		    </div>
+		    <div class="card-content">
+		      	<div class="card-content-inner">
+		      		<p><span>车辆名称：</span><span>{:C('APPLICATION_OBJ')[$app['application_obj_id']]}</span></p>
+		      		<p><span>人数：</span><span>{$app['join_num']}</span></p>
+		      		<p><span>审批状态：</span><span><if condition="$app.approve_status  eq 1">已审批<else/>未审批</if></span></p>
+		      	</div>
+		    </div>
+		    <div class="card-footer">{:getYmdHiFormat(C('TIME_ITEM_TYPE'),$app['start_time'],$app['end_time'])}</div>
+	  	</div>
+	  	</foreach>
+	  </div>
+	</div>
+</body>

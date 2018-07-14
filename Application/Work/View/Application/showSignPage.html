@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <title>{:C('TITLE_NAME')}</title>
+    <!--link rel="stylesheet" href="http://www.runoob.com/try/weui/style/weui.css"/ -->
+    <link rel="stylesheet" href="__PUBLIC__/css/weui.min.css"/>
+    <link rel="stylesheet" href="__PUBLIC__/css/example.css"/>
+    <style type="text/css">
+    	.page.flex .placeholder  {
+    		background-color: #0073dd;
+    		color: white;
+    	}
+		#sdd_header {
+			margin: 0px;
+		}
+		.cs_item {
+			margin-top: 0px;
+		}
+		.cs_item:after {
+			border-bottom: 0px solid #e5e5e5;
+		}
+		#cs_content{
+			background-color: #ffffff;
+			padding-top: 0px;
+		}
+		#cs_content:before{
+			border-top: 0px solid #e5e5e5;
+		}
+        #cs_sign_ok>a {
+            background-color: #0073dd;
+            margin-top: 30px;
+        }
+		.weui-cells:before {
+			border-top: 0px solid #e5e5e5;
+		}
+		#cs_content_detail {
+			display: block;
+			padding: 2px 10px;
+		}
+		#cs_sign{
+			margin-top: 5px;
+		}
+        .import_text {
+            text-decoration: underline;
+            font-weight: 900;
+        }
+        .import_text:before {
+            content: '\00A0\00A0';
+        }
+        .import_text:after {
+            content: '\00A0\00A0';
+        }
+    </style>
+</head>
+<body ontouchstart>
+    <div class="container">
+        <div class="page tabbar badge button flex uploader js_show">
+            <!--div class="page__bd input page__bd_spacing" style="padding: 0;">
+                <div class="weui-flex">
+                    <div class="weui-flex__item"><div class="placeholder" id="sdd_header" >Pay for</div></div>
+                </div>
+            </div-->
+            <div class="page__bd input page__bd_spacing" style="height: 100%; padding: 0;">
+                <!--div class="weui-tab"-->
+                    <div class="weui-tab__panel" id="panel-1">
+                        <div class="weui-flex">
+                            <div class="weui-flex__item"><div class="placeholder" id="sdd_header" >签到</div></div>
+                        </div>
+                        <div class="weui-cells cs_item">
+                        	<div class="weui-cell">
+                        		<div class="weui-cell__hd">
+                        			<img src="__PUBLIC__/images/cs_title.png" alt style="width: 20px;margin-right: 5px;display: block;">
+                        		</div>
+                        		<div class="weui-cell__bd">
+                        			<p>会议主题</p>
+                        		</div>
+                        		<div class="weui-cell__ft"></div>
+                        	</div>
+                        </div>
+
+                        <div class="weui-media-box weui-media-box_text" id="cs_content">
+		                    <p class="weui-media-box__desc" id="cs_content_detail">
+		                    <span style="color:black;font-size: 1.2em;">{$cs_info['title']}</span><br/>
+                            <!--
+		                    1、项目国内发展计划<br/>
+		                    2、项目国外发展计划<br/>
+                        -->
+                            {$cs_info['content']}
+		                	</p>
+		                </div>
+		                <div class="weui-cells cs_item">
+                        	<div class="weui-cell">
+                        		<div class="weui-cell__hd">
+                        			<img src="__PUBLIC__/images/cs_time.png" alt style="width: 20px;margin-right: 5px;display: block;">
+                        		</div>
+                        		<div class="weui-cell__bd">
+                        			<p>开始时间：{$cs_info['start_time']}</p>
+                        		</div>
+                        		<div class="weui-cell__ft"></div>
+                        	</div>
+                        </div>
+                        <div class="weui-cells cs_item">
+                        	<div class="weui-cell">
+                        		<div class="weui-cell__hd">
+                        			<img src="__PUBLIC__/images/cs_addr.png" alt style="width: 20px;margin-right: 5px;display: block;">
+                        		</div>
+                        		<div class="weui-cell__bd">
+                        			<p>会议地点：{$cs_info['addr']}</p>
+                        		</div>
+                        		<div class="weui-cell__ft"></div>
+                        	</div>
+                        </div>
+                        <div class="weui-cells cs_item">
+                        	<div class="weui-cell">
+                        		<div class="weui-cell__hd">
+                        			<img src="__PUBLIC__/images/cs_host_man.png" alt style="width: 20px;margin-right: 5px;display: block;">
+                        		</div>
+                        		<div class="weui-cell__bd">
+                        			<p>主会人：{$cs_info['host_user']}</p>
+                        		</div>
+                        		<div class="weui-cell__ft"></div>
+                        	</div>
+                        </div>
+
+                        <div class="weui-cells cs_item" id="cs_sign">
+                        	<div class="weui-cell">
+                        		<div class="weui-cell__hd">
+                        			<img src="__PUBLIC__/images/cs_sign.png" alt style="width: 20px;margin-right: 5px;">签到人：
+                        		</div>
+                        		<div class="weui-cell__bd">
+                        			<select class="weui-select" id="sign_list_sel" style="display: none;" onchange="signerChange(this)">
+                                        <if condition="$cs_pre_users neq null">
+                                            <foreach name="cs_pre_users" item="user">
+                                            <option value="{$user.user_name}">{$user.user_name}</option>
+                                            </foreach>
+                                        </if>
+                                        <!--
+                        				<option value="张三1">张三</option>
+                        				<option value="李四1">李四</option>
+                        				<option value="王五1">王五</option>
+                                    -->
+                        			</select>
+                        			<input class="weui-input" type="text" placeholder="请输入本人姓名" id="sign_name_text" value="">
+                        		</div>
+                        		<div class="weui-cell__ft"><img src="__PUBLIC__/images/cs_host_man.png" alt style="width: 15px;margin-left: 5px;display: block;" id="showSignUsersSel" onclick1="showSignListSel1();"></div>
+                        	</div>
+                        </div>
+                        <div class="page__bd page__bd_spacing" id="cs_sign_ok">
+                            <a href="javascript:;" class="weui-btn weui-btn_primary" id="sign_ok_btn">确认签到</a>
+                        </div>
+                    </div>
+                <!--/div-->
+                <!-- toast -->
+                <div id="toast" style="opacity: 100; display: none;">
+                    <div class="weui-mask_transparent"></div>
+                    <div class="weui-toast">
+                        <!--i class="weui-icon-success-no-circle weui-icon_toast"></i-->
+                        <i class="weui-icon-warn weui-icon_toast"></i>
+                        <p class="weui-toast__content">已完成</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="__PUBLIC__/js/zepto.min.js"></script>
+    <script src="https://res.wx.qq.com/open/libs/weuijs/1.0.0/weui.min.js"></script>
+    <script type="text/javascript">
+    var sign_list_sel 	= $('#sign_list_sel');
+    var sign_name_text 	= $('#sign_name_text');
+    $(document).ready(function(){
+        $("#showSignUsersSel").click(function() {
+            sign_name_text.css('display', 'none');
+            sign_list_sel.css('display', 'block');
+            // 如果input为空，将第一个option放入
+            var first_opt = $('option');
+            if (sign_name_text.val() == '') {
+                sign_name_text.val(first_opt);
+            }
+            open(sign_list_sel);
+            //sign_list_sel.click();
+            
+            //sign_list_sel.trigger('click').trigger('change');
+        });
+    });
+    function open(elem) {
+        if (document.createEvent) {
+            var e = document.createEvent("TouchEvents");
+            //e.initMouseEvent("mousedown", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+            e.initMouseEvent("tap");
+            elem[0].dispatchEvent(e);
+        } else if (element.fireEvent) {
+            elem[0].fireEvent("onmousedown");
+        }
+    }
+    function showSignListSel() {
+    	sign_name_text.css('display', 'none');
+    	sign_list_sel.css('display', 'block');
+        // 如果input为空，将第一个option放入
+        var first_opt = $('option');
+        if(sign_name_text.val() == '') {
+            sign_name_text.val(first_opt);
+        }
+        //open();
+        //sign_list_sel.trigger('change');
+        //var elem = $().parent().prev().find('#sign_list_sel');
+        //console.log('elem.class = ' + sign_list_sel.attr('class'));
+        //open(sign_list_sel);
+        /*
+        if (document.createEvent) {
+            var e = document.createEvent("MouseEvents");
+            e.initMouseEvent("mousedown", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+            sign_list_sel.dispatchEvent(e);
+        } else if (element.fireEvent) {
+            sign_list_sel.fireEvent("onmousedown");
+        }
+        */
+    }
+    
+    function signerChange(obj) {
+    	var value = $(obj).val();
+    	console.log('value = ' + value);
+    	sign_name_text.val(value);
+    	sign_list_sel.css('display', 'none');
+    	sign_name_text.css('display', 'block');
+    }
+    var cs_id = "{$cs_info['cs_id']}";
+    $("#sign_ok_btn").click(function() {
+        var sign_username = $('#sign_name_text').val();
+        //alert('id:user => ' + cs_id +'-' + sign_username);
+        $.ajax({
+            type: "post",
+            url: "{:U('Application/doConferenceSign')}",
+            data: {
+                cs_id:          cs_id,
+                sign_username:  sign_username,
+            },
+            dataType: "json",
+            async: true,
+            success: function(res) {
+                var toast = $('#toast');
+                if (toast.css('display') != 'none') return;
+                if(res.code == 3) {
+                    toast.find('i').removeClass('weui-icon-success-no-circle').addClass('weui-icon-warn');
+                    toast.find('.weui-toast__content').text(res.msg);
+                    toast.fadeIn(1000);
+                    setTimeout(function () {
+                        toast.fadeOut(1000);
+                    }, 2000);
+                } 
+                // 已经签到过
+                else if(res.code == 2) {
+                    toast.find('i').removeClass('weui-icon-success-no-circle').addClass('weui-icon-warn');
+                    toast.find('.weui-toast__content').text(res.msg);
+                    $("#sign_ok_btn").removeClass("weui-btn_primary").addClass('weui-btn_disabled weui-btn_default').css('background-color', '#F7F7F7').css('color', 'rgba(0, 0, 0, 0.3)');
+                        $("#sign_ok_btn").unbind();
+                    toast.fadeIn(1000);
+                    setTimeout(function () {
+                        toast.fadeOut(1000);
+                        window.close();
+                    }, 2000);
+
+                } // 签到成功
+                else if(res.code == 1) {
+                    toast.find('.weui-toast__content').text(res.msg);
+                    $("#sign_ok_btn").removeClass("weui-btn_primary").addClass('weui-btn_disabled weui-btn_default').css('background-color', '#F7F7F7').css('color', 'rgba(0, 0, 0, 0.3)');
+                        $("#sign_ok_btn").unbind();
+                    toast.fadeIn(1000);
+                    setTimeout(function () {
+                        toast.fadeOut(1000);
+                        window.close();
+                    }, 2000);
+                } else {
+                    toast.find('i').removeClass('weui-icon-success-no-circle').addClass('weui-icon-warn');
+                    toast.find('.weui-toast__content').text('签到失败，请重新扫码或联系主会人！');
+                    toast.fadeIn(1000);
+                    setTimeout(function () {
+                        toast.fadeOut(1000);
+                        window.close();
+                    }, 2000);
+                }
+            },
+            error: function(xmlHttpRequest, textStatus, errorThrown) {
+                alert('系统异常，请联系主会人');
+            }
+        });
+    })
+    </script>
+</body>
+</html>

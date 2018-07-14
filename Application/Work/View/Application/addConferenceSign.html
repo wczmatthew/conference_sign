@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <title>{:C('TITLE_NAME')}</title>
+    <!--link rel="stylesheet" href="http://www.runoob.com/try/weui/style/weui.css"/ -->
+    <link rel="stylesheet" href="__PUBLIC__/css/weui.min.css"/>
+    <link rel="stylesheet" href="__PUBLIC__/css/example.css"/>
+    <style type="text/css">
+    	.page.flex .placeholder  {
+    		background-color: #0073dd;
+    		color: white;
+    	}
+		#sdd_header {
+			margin: 0px;
+		}
+		.cs_item {
+			margin-top: 0px;
+		}
+		.cs_item:after {
+			border-bottom: 0px solid #e5e5e5;
+		}
+		#cs_content{
+			background-color: #ffffff;
+			padding-top: 0px;
+		}
+		#cs_content:before{
+			border-top: 0px solid #e5e5e5;
+		}
+        #cs_sign_ok>a {
+            background-color: #0073dd;
+            margin-top: 30px;
+        }
+		.weui-cells:before {
+			border-top: 0px solid #e5e5e5;
+		}
+		#cs_content_detail {
+			display: block;
+			padding: 2px 10px;
+		}
+		#cs_sign{
+			margin-top: 5px;
+		}
+        .import_text {
+            text-decoration: underline;
+            font-weight: 900;
+        }
+        .import_text:before {
+            content: '\00A0\00A0';
+        }
+        .import_text:after {
+            content: '\00A0\00A0';
+        }
+        .cs_layout {
+            padding: 0px 2em;
+            font-size: 1em;
+        }
+        .weui-input {
+            width: 80%;
+        }
+    </style>
+</head>
+<body ontouchstart>
+    <div class="container">
+        <div class="page tabbar badge button flex uploader js_show">
+            <!--div class="page__bd input page__bd_spacing" style="padding: 0;">
+                <div class="weui-flex">
+                    <div class="weui-flex__item"><div class="placeholder" id="sdd_header" >Pay for</div></div>
+                </div>
+            </div-->
+            <div class="page__bd input page__bd_spacing" style="height: 100%; padding: 0;">
+                <!--div class="weui-tab"-->
+                    <div class="weui-tab__panel" id="panel-1">
+                        <div class="weui-flex">
+                            <div class="weui-flex__item"><div class="placeholder" id="sdd_header" >签到</div></div>
+                        </div>
+                        <div class="weui-cells cs_item">
+                        	<div class="weui-cell">
+                        		<div class="weui-cell__hd">
+                        			<img src="__PUBLIC__/images/cs_title.png" alt style="width: 20px;margin-right: 5px;display: block;">
+                        		</div>
+                        		<div class="weui-cell__bd">
+                        			<p>会议主题</p>
+                        		</div>
+                        		<div class="weui-cell__ft"></div>
+                        	</div>
+                        </div>
+                        <div class="weui-cells cs_item">
+                            <div class="weui-cell cs_layout">
+                                <div class="weui-cell__hd">
+                                    
+                                </div>
+                                <div class="weui-cell__bd">
+                                    <input class="weui-input" type="text" placeholder="请输入会议主题" id="cs_title" value="">
+                                </div>
+                                <div class="weui-cell__ft"></div>
+                            </div>
+                        </div>
+                        <div class="weui-cells cs_item">
+                            <div class="weui-cell">
+                                <div class="weui-cell__hd">
+                                    <img src="__PUBLIC__/images/cs_content.png" alt style="width: 20px;margin-right: 5px;display: block;">
+                                </div>
+                                <div class="weui-cell__bd">
+                                    <p>会议内容</p>
+                                </div>
+                                <div class="weui-cell__ft"></div>
+                            </div>
+                        </div>
+                        <div class="weui-cells cs_item">
+                            <div class="weui-cell cs_layout">
+                                <div class="weui-cell__hd">
+                                    
+                                </div>
+                                <div class="weui-cell__bd">
+                                    <textarea class="weui-textarea" placeholder="请输入会议内容" rows="3"></textarea>
+                                    <!--div class="weui-textarea-counter"><span>0</span>/200</div-->
+                                </div>
+                                <div class="weui-cell__ft"></div>
+                            </div>
+                        </div>
+		                <div class="weui-cells cs_item">
+                        	<div class="weui-cell">
+                        		<div class="weui-cell__hd">
+                        			<img src="__PUBLIC__/images/cs_time.png" alt style="width: 20px;">
+                                    <span style="position: relative;top: 15px;">会议时间：</span>
+                        		</div>
+                        		<div class="weui-cell__bd">
+                        			<!--span style="position: relative;top: 15px;">会议时间：</span--><input class="weui-input" type="datetime-local" value="" placeholder="" style="position: relative;top: -17px;left: 5em;">
+                        		</div>
+                        		<div class="weui-cell__ft"></div>
+                        	</div>
+                        </div>
+                        <div class="weui-cells cs_item">
+                        	<div class="weui-cell">
+                        		<div class="weui-cell__hd">
+                        			<img src="__PUBLIC__/images/cs_addr.png" alt style="width: 20px;margin-right: 5px;display: block;">
+                        		</div>
+                        		<div class="weui-cell__bd">
+                        			<p>会议地点：{$cs_info['addr']}</p>
+                        		</div>
+                        		<div class="weui-cell__ft"></div>
+                        	</div>
+                        </div>
+                        <div class="weui-cells cs_item">
+                        	<div class="weui-cell">
+                        		<div class="weui-cell__hd">
+                        			<img src="__PUBLIC__/images/cs_host_man.png" alt style="width: 20px;margin-right: 5px;display: block;">
+                        		</div>
+                        		<div class="weui-cell__bd">
+                        			<p>主会人：{$cs_info['host_user']}</p>
+                        		</div>
+                        		<div class="weui-cell__ft"></div>
+                        	</div>
+                        </div>
+
+                        <div class="weui-cells cs_item" id="cs_sign">
+                        	<div class="weui-cell">
+                        		<div class="weui-cell__hd">
+                        			<img src="__PUBLIC__/images/cs_sign.png" alt style="width: 20px;margin-right: 5px;">签到人：
+                        		</div>
+                        		<div class="weui-cell__bd">
+                        			<select class="weui-select" id="sign_list_sel" style="display: none;" onchange="signerChange(this)">
+                                        <if condition="$cs_pre_users neq null">
+                                            <foreach name="cs_pre_users" item="user">
+                                            <option value="{$user.user_name}">{$user.user_name}</option>
+                                            </foreach>
+                                        </if>
+                                        <!--
+                        				<option value="张三1">张三</option>
+                        				<option value="李四1">李四</option>
+                        				<option value="王五1">王五</option>
+                                    -->
+                        			</select>
+                        			<input class="weui-input" type="text" placeholder="请输入本人姓名" id="sign_name_text" value="">
+                        		</div>
+                        		<div class="weui-cell__ft"><img src="__PUBLIC__/images/cs_host_man.png" alt style="width: 15px;margin-left: 5px;display: block;" id="showSignUsersSel" onclick1="showSignListSel1();"></div>
+                        	</div>
+                        </div>
+                        <div class="page__bd page__bd_spacing" id="cs_sign_ok">
+                            <a href="javascript:;" class="weui-btn weui-btn_primary" id="sign_ok_btn">确认签到</a>
+                        </div>
+                    </div>
+                <!--/div-->
+                <!-- toast -->
+                <div id="toast" style="opacity: 100; display: none;">
+                    <div class="weui-mask_transparent"></div>
+                    <div class="weui-toast">
+                        <!--i class="weui-icon-success-no-circle weui-icon_toast"></i-->
+                        <i class="weui-icon-warn weui-icon_toast"></i>
+                        <p class="weui-toast__content">已完成</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="__PUBLIC__/js/zepto.min.js"></script>
+    <script src="https://res.wx.qq.com/open/libs/weuijs/1.0.0/weui.min.js"></script>
+    <script type="text/javascript">
+   
+    </script>
+</body>
+</html>

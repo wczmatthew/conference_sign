@@ -1,0 +1,66 @@
+<?php
+    if(C('LAYOUT_ON')) {
+        echo '{__NOLAYOUT__}';
+    }
+?>
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>提示</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="format-detection" content="telephone=no" />
+    <link rel="stylesheet" href="__PUBLIC__/css/ui.css">
+    <link rel="stylesheet" href="__PUBLIC__/css/style.css">
+    <link rel="stylesheet" href="__PUBLIC__/css/iconfont.css">
+
+</head>
+
+<body>
+    <div class="page page-current" id="page-home">
+         <header class="bar bar-nav bar-primary">          
+           <a href="javascript:history.go(-1)" class="icon iconfont pull-left">&#xe62e;</a>
+           <h1 class="title title-left">提示</h1>
+
+        </header>   
+
+        <div class="content">
+            <div class="msg">
+
+                    <div class="icon-area"><i class="icon-success icon-msg"></i></div>
+                    <div class="text-area">
+                        <h2 class="msg-title">
+                        <?php  
+                        if($successTitle != "" || $successTitle != NULL)
+                            echo $errorTitle;
+                        else
+                            echo "操作成功";
+                        ?>
+                            
+                        </h2>
+                        <p class="msg-desc"><?php echo($message); ?></p>
+                        <p class="msg-desc">
+页面自动 <a id="href" href="<?php echo($jumpUrl); ?>">跳转</a> 等待时间： <b id="wait"><?php echo($waitSecond); ?></b>
+                        </p>          
+                    </div>
+            </div>
+
+        </div>
+
+    </div>
+<script type="text/javascript">
+(function(){
+var wait = document.getElementById('wait'),href = document.getElementById('href').href;
+var interval = setInterval(function(){
+    var time = --wait.innerHTML;
+    if(time <= 0) {
+        location.href = href;
+        clearInterval(interval);
+    };
+}, 1000);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,498 @@
+<head>
+	<link rel="stylesheet" href="__PUBLIC__/css/ui.css?v=0.0.8">
+    <link rel="stylesheet" href="__PUBLIC__/css/style.css?v=0.0.8?">
+	<script type='text/javascript' src='__PUBLIC__/js/countUp.min.js'></script>
+	<link rel='stylesheet' href='__PUBLIC__/css/calendar.css' />
+	<!--标准mui.css-->
+	<!--link rel="stylesheet" href="__PUBLIC__/css/mui.min.css"-->
+
+	<script type='text/javascript' src='__PUBLIC__/js/layer.js'></script>
+	<script type='text/javascript'>
+		$.smConfig.rawCitiesData = [
+	    {
+	        "name":"2017",
+	        "sub":[
+	            {
+	                "name":"请选择"
+	            },
+	            {
+	                "name":"第46周"
+	            },
+	            {
+	                "name":"第47周"
+	            },
+	            {
+	                "name":"第48周"
+	            },
+	        ],
+	        "type":0
+	    },
+	    {
+	        "name":"2018",
+	        "sub":[
+	            {
+	                "name":"请选择"
+	            },
+	            {
+	                "name":"第34周"
+	            },
+	            {
+	                "name":"第35周"
+	            },
+	            {
+	                "name":"第36周"
+	            },
+	        ],
+	        "type":0
+	    }];
+		function showDetail(ele) {
+			var title 		= $(ele).attr('title');
+			var start_time	= $(ele).attr('start_time');
+			var end_time	= $(ele).attr('end_time');
+			var str = '<p>' + title + '<br/>' + start_time + '-' + end_time + '</p>';
+			layer.msg(str, {
+			  	offset: 't',
+			  	anim: 12
+			});
+		}
+		/*
+		function changeYear(p, value, displayValue) {
+			console.log('p = ' + p);
+			console.log("value = " + value[0] + '+++' + value[1]);
+			console.log("displayValue = "  + displayValue);
+			var year = value[0];
+			if (year = '2018') {
+			var new_cols = [
+				    {
+				      textAlign: 'center',
+				      values: ['2017', '2018', '2019']
+				    },
+				    {
+				      textAlign: 'center',
+				      values: ['1', '2'],
+				    }
+				   ];
+				p.setValue(new_cols,true);
+			}
+		}
+		*/
+		function pickerCloseFormSubmit(p) {
+			// 获取当前选择时间
+			var chs_datetime = $("#more-datetime-picker").val();
+			if(chs_datetime != cur_datetime) {
+				// 如果是 按周 模式，对提交前数据进行处理
+	    		<if condition="C('TIME_ITEM_TYPE') eq C('TIME_ITEM_WEEK')">
+	    		var dt_pkr_value = $("#more-datetime-picker").val();
+	    		var dt_pkr_value_len = dt_pkr_value.length;
+	    		var di_char_index 	= dt_pkr_value.indexOf('第');
+	    		var zhou_char_index	= dt_pkr_value.indexOf('周');
+
+	    		var year = dt_pkr_value.substr(0, di_char_index);
+	    		var week = dt_pkr_value.substr(di_char_index+1, zhou_char_index-di_char_index-1);
+
+	    		$("#more-datetime-picker").val(year.trim()+"-"+week);
+	    		</if>
+	    		// 提交表单
+				$("#form").submit();
+			} 
+		}
+
+		function appObjChoose(p){
+			var p_app_obj_value = $("#p_app_obj_value");
+			var paov = p_app_obj_value.val();
+			if(paov == cur_app_obj_value) {
+				return;
+			} else {
+				cur_app_obj_value = paov;
+				for(var i=0; i<app_obj_arr.length;i++) {
+		    		if (paov == app_obj_arr[i]['value']) {
+			    		$('#p_app_obj_key').val(app_obj_arr[i]['key']);
+			    		cur_app_obj_key = app_obj_arr[i]['key'];
+			    		// form提交
+			    		$("#form").submit();
+			    		break;
+		    		}
+				}
+			}
+		}
+		$(document).ready(function() {
+			var actTab = $('.buttons-tab').find(".active");
+			$('.buttons-tab').find('.tab-link').each(function(){
+				$(this).click(function(){
+					if(actTab != this) {
+						$(this).parent().find(".active").removeClass("active");
+						$(this).addClass('active');
+						actTab = $('.buttons-tab').find(".active");
+						$("#p_time").val($(this).text());
+					}
+					
+				});
+			});
+		});
+	</script>
+	<php>$height = C('ELE_LI_HEIGHT');</php>
+	<style type="text/css">
+	.hour-li {
+		height: {$height + 1}px;
+		padding-bottom: 1px;
+		border-bottom: solid 1px rgba(169,169,169,0.5);
+	}	
+	.hour-li:first-child {
+		border-top: solid 1px rgba(169, 169, 169, 0.5);
+		height: {$height + 2}px;
+	}
+	.hour-li:last-child {
+		border-bottom: solid 1px rgba(169, 169, 169, 0.0);
+		height: {$height + 1}px;
+	}
+	.hour-num {
+		position: relative;
+		top: -0.65rem;
+		background-color: #efeff4;
+		float: left;
+		width: 25%;
+		color: gray;
+		text-align: center;
+	}	
+	.hour-status {
+		float: right;
+		width: 75%;
+	}
+	.content-block {
+		margin:0.75rem 0;
+		padding: 0 0.25rem;
+	}
+	.hour-status-height {
+		position: relative;
+	}
+	.app_obj_status_item {
+		width: 33%;
+		float: left;
+		text-align: center;
+	}
+	.app_obj_status_item_color {
+		padding-left: 5px;
+		width: 18px; 
+		height: 18px; 
+	}
+	.app_obj_status_item_text {
+		position: relative; 
+		top: -22px;
+	}
+	.content-block {
+		margin: 0 0;
+	}
+	.list-block {
+		margin: 0 0;
+	}
+	</style>
+</head>
+<body>
+	<div class="page page-current">
+	  <header class="bar bar-nav bar-primary">
+	  	<div><i class="icon iconfont pull-left" onclick="javascript:history.go(-1);">&#xe62e;</i></div>
+	    <h1 class='title title-left'>{:C('GOBACK_NAME')}</h1>
+	    <div><i class="icon iconfont pull-right myicon-wo" onclick="javascript:window.location.href='{:U("Work/Application/myApps", array("arg1" => $arg1, "arg2" => $arg2))}'"></i></div>
+	  </header>
+	  <div class="content">
+	  	<form action="{:U('Work/Application/listPage', array('arg1' => $arg1, 'arg2' => $arg2))}" method="POST" id="form">
+	  	<div class="buttons-tab">
+	  	  <!-- 输出三个标签 -->
+	  	  <php> $t_count = 0;</php>
+	  	  <foreach name="tab_items" item="t_it" key="k">
+	  	  <if condition="$t_count lt C('TAB_NUM')">
+	  	  <a href="#tab{$k}" class="tab-link button <if condition="$t_count eq 0">active</if>">{$t_it['name']}</a>	
+	  	  </if>
+	  	  <php> $t_count++;</php>
+	  	  </foreach>
+	    </div>
+	    <div class="content-block">
+	    	<!-- 状态颜色说明 -->
+	    	<div class="list-block">
+		        <ul>
+		          <li>
+		            <div class="item-content">
+		              <div class="item-inner">
+		                <div class="item-input" style="margin: 0.5rem 0;height: 35px;">
+		                  <div class="app_obj_status_item">
+		                  	<div class="app_obj_status_item_color" style="background-color: {:C('APP_OBJ_STATUS_END')};"></div>
+		                  	<span class="app_obj_status_item_text">已结束</span>
+		                  </div>
+		              	  <div class="app_obj_status_item">
+		                  	<div class="app_obj_status_item_color" style="background-color: {:C('APP_OBJ_STATUS_GO')};"></div>
+		                  	<span class="app_obj_status_item_text">进行中</span>
+		                  </div>
+		                  <div class="app_obj_status_item">
+		                  	<div class="app_obj_status_item_color" style="background-color: {:C('APP_OBJ_STATUS_ORDER')};"></div>
+		                  	<span class="app_obj_status_item_text">预约中</span>
+		                  </div>
+		                </div>
+		              </div>
+		            </div>
+		          </li>
+		        </ul>
+	      	</div>
+	      	<!-- 时间选择 -->
+	    	<div class="list-block">
+		        <ul>
+		          <li>
+		            <div class="item-content">
+		              <div class="item-inner">
+		                <div class="item-input" style="margin: 0.5rem 0;height: 35px;">
+		                  <input placeholder="选择日期" id="more-datetime-picker" name="p_time" value='{$first_tab_item_name}' readonly="" type="text" style="width:100%;text-align:center;height:33px;" >
+		                  <if condition="C('TIME_ITEM_TYPE') eq C('TIME_ITEM_MONTH')">
+		                  <script>
+							$("#more-datetime-picker").datetimeYMPicker({
+							    toolbarTemplate: '<header class="bar bar-nav">\
+							    <button class="button button-link pull-right close-picker">确定</button>\
+							    <h1 class="title" style="left: 4.2rem;right: 4.2rem;">选择时间</h1>\
+							    </header>',
+							    onClose: pickerCloseFormSubmit,
+						  	});
+						  </script>
+						  <elseif condition="C('TIME_ITEM_TYPE') eq C('TIME_ITEM_DAY')"/>
+						    <script>
+						      /*
+							  $("#more-datetime-picker").datetimePicker({
+							    toolbarTemplate: '<header class="bar bar-nav">\
+							    <button class="button button-link pull-right close-picker">确定</button>\
+							    <h1 class="title">选择日期</h1>\
+							    </header>'
+							  });
+							  */
+							  $("#more-datetime-picker").calendar({
+							  	monthNames: 		['01', '02', '03', '04', '05', '06', '07', '08' , '09' , '10', '11', '12'],
+							  	monthNamesShort: 	['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+							  	dayNamesShort:		['周日', '周一', '周二', '周三', '周四', '周五', '周六'],
+							  	onClose: pickerCloseFormSubmit,
+							  });
+							</script>
+						  <elseif condition="C('TIME_ITEM_TYPE') eq C('TIME_ITEM_WEEK')" /> 
+						  	<script>
+							$("#more-datetime-picker").picker({
+							  toolbarTemplate: '<header class="bar bar-nav">\
+							  <button class="button button-link pull-right close-picker">确定</button>\
+							  <h1 class="title" style="left: 4.2rem;right: 4.2rem;">选择时间</h1>\
+							  </header>',
+							  cols: [
+							    {
+							      textAlign: 'center',
+							      values: ['2017', '2018', '2019']
+							    },
+							    {
+							      textAlign: 'center',
+							      values: [<php>for($i=1;$i<53;$i++){echo "'第".$i."周',";}</php>]
+							    }
+							  ],
+							  onClose: pickerCloseFormSubmit,
+							});
+							</script>
+						  </if>
+		                </div>
+		              </div>
+		            </div>
+		          </li>
+		        </ul>
+	      	</div>
+	      	<!-- 申请事物 选择 -->
+	    	<div class="list-block">
+		        <ul>
+		          <li>
+		            <div class="item-content">
+		              <div class="item-inner">
+		                <div class="item-input" style="margin: 0.5rem 0;height: 35px;">
+		                  <input placeholder="选择车辆" id="p_app_obj_value" value='{$app_obj_value}' readonly="" type="text" style="width:100%;text-align:center;height:33px;" >
+		                  <input type="hidden" id="p_app_obj_key" name="p_app_obj_key" value="{$app_obj_key}">
+
+		                </div>
+		              </div>
+		            </div>
+		          </li>
+		        </ul>
+	      	</div>
+	    	<script>
+			$("#p_app_obj_value").picker({
+			  toolbarTemplate: '<header class="bar bar-nav">\
+			  <button class="button button-link pull-right close-picker" id="ok_app_obj">确定</button>\
+			  <h1 class="title" style="left: 4.2rem;right: 4.2rem;">选择{:C("APPLICATION_OBJ_PICKER_TITLE")}</h1>\
+			  </header>',
+			  cols: [
+			    {
+			      textAlign: 'center',
+			      values: [<php>foreach($objs as $key=>$value){echo "'".$value."',";}</php>]
+			    }
+			  ],
+			  //onClose: appObjChoose,
+			});
+			</script>
+	    </div>
+	    <div class="content-block">
+		    <div class="tabs">
+		      <php>
+		      $tal_index = 0;
+		      $div_num = getAppItemDivisonBaseNum($t_item_type);
+		      $interval = C('ITEM_INTERVAL');
+		      $k = $div_num / C('ITEM_INTERVAL');
+
+		  	  </php>
+		      <foreach name="tab_app_lists" item="list">
+		      <div id="tab{$tal_index}" class="tab <if condition="$tal_index eq 0">active</if>">
+		        <div class="content-block">
+		          <ul>
+		          	<if condition="C('TIME_ITEM_TYPE') eq C('TIME_ITEM_DAY')">
+		          	<for start="C('DAY_HOUR_START')" end="(C('DAY_HOUR_END')+1)" name="i">
+		          	<php>$l = $k+1;</php>
+		          	<for start="1" end="$l" name="j">
+				    <li class="hour-li">
+				    	<php>
+				    		$i_tmp = str_pad($i,2,"0",STR_PAD_LEFT);
+				    		$min = ($j-1) * $interval;
+				    		$min_tmp = str_pad($min,2,"0",STR_PAD_LEFT);
+				    	</php>
+		          		<span class="hour-num">{$i_tmp}:{$min_tmp}</span>
+		          		<div class="hour-status">
+		          			<div class="hour-status-height" onclick="showDetail(this);" 
+		          			<foreach name="list" item="app">
+		          				<if condition="$app['day_hour_or_hour_min_list'][$i*$k + $j] neq null">
+		          				style="height: {$app['day_hour_or_hour_min_list'][$i*$k + $j]['height']}px;
+		          				top: {$app['day_hour_or_hour_min_list'][$i*$k + $j]['top']}px;
+		          				background-color: {$app['day_hour_or_hour_min_list'][$i*$k + $j]['color']};"
+		          				title="{$app['title']}" start_time="{$app['start_time']}" end_time="{$app['end_time']}" 
+		          				</if>
+		          			</foreach>>
+		          			</div>
+		          		</div>
+		          	</li>
+		          	</for>
+				    </for>
+				    <elseif condition="C('TIME_ITEM_TYPE') eq C('TIME_ITEM_MONTH')"/>
+				    <for start="1" end="($tab_items[$tal_index]['day_num']+1)" name="i">
+				    <php>$i_tmp = str_pad($i,2,"0",STR_PAD_LEFT);</php>
+				    <php>$l = $k+1;</php>
+				    <for start="1" end="$l" name="j">
+				    <li class="hour-li">
+				    	<!-- 如果间隔和 除数相等，比如 24小时 & 天 -->
+				    	<if condition="$k eq 1">
+				    		<span class="hour-num">{$i_tmp}日</span>
+				    	<else/>
+							<php>
+				    		$j_tmp = str_pad($interval*($j-1),2,"0",STR_PAD_LEFT);
+				    		</php>
+				    		<span class="hour-num">{$i_tmp}日{$j_tmp}点</span>
+				    	</if>
+		          		<div class="hour-status">
+		          			<div class="hour-status-height" onclick="showDetail(this);" 
+		          			<foreach name="list" item="app">
+		          				<if condition="$app['day_hour_or_hour_min_list'][$i*$k + $j] neq null">
+		          				style="height: {$app['day_hour_or_hour_min_list'][$i*$k + $j]['height']}px;
+		          				top: {$app['day_hour_or_hour_min_list'][$i*$k + $j]['top']}px;
+		          				background-color: {$app['day_hour_or_hour_min_list'][$i*$k + $j]['color']};"
+		          				title="{$app['title']}" start_time="{$app['start_time']}" end_time="{$app['end_time']}"
+		          				</if>
+		          			</foreach>>
+		          			</div>
+		          		</div>
+		          	</li>
+		          	</for>
+				    </for>
+				    <elseif condition="C('TIME_ITEM_TYPE') eq C('TIME_ITEM_WEEK')"/>
+				    <for start="1" end="8" name="i">
+				    <php>
+				    	$i_tmp = "星期" . $i .'&nbsp;';
+				    	$l = $k+1;
+				    </php>
+				    <for start="1" end="$l" name="j">
+				    <li class="hour-li">
+				    	<if condition="$k eq 1">
+				    		<span class="hour-num">{$i_tmp}</span>
+				    	<else/>
+							<php>
+				    		$j_tmp = str_pad($interval*($j-1),2,"0",STR_PAD_LEFT);
+				    		</php>
+				    		<span class="hour-num">{$i_tmp}{$j_tmp}点</span>
+				    	</if>
+		          		<div class="hour-status">
+		          			<div class="hour-status-height" onclick="showDetail(this);" 
+		          			<foreach name="list" item="app">
+		          				<if condition="$app['day_hour_or_hour_min_list'][$i*$k + $j] neq null">
+		          				style="height: {$app['day_hour_or_hour_min_list'][$i*$k + $j]['height']}px;
+		          				top: {$app['day_hour_or_hour_min_list'][$i*$k + $j]['top']}px;
+		          				background-color: {$app['day_hour_or_hour_min_list'][$i*$k + $j]['color']};"
+		          				title="{$app['title']}" start_time="{$app['start_time']}" end_time="{$app['end_time']}"
+		          				</if>
+		          			</foreach>>
+		          			</div>
+		          		</div>
+		          	</li>
+				    </for>
+					</for>
+					</if>
+		          </ul>
+		        </div>
+		      </div>
+		      <php>$tal_index++;</php>
+		  	  </foreach>
+		    </div>
+	  	</div>
+	  	</form>
+	  </div>
+	</div>
+<script type="text/javascript">
+var cur_app_obj_key 	= '{$app_obj_key}';
+var cur_app_obj_value	= '{$app_obj_value}';
+
+var app_obj_arr = new Array();
+
+// 当前页面时间
+var cur_datetime = "{first_tab_item_name}";
+
+<volist name="objs" id="obj">
+    <php>echo "app_obj_arr.push({'key':'".$key."', 'value': '". $obj."'});";</php>
+</volist>
+/*
+ * 使用delegate写法
+$('body').delegate("#p_app_obj_value", "change", function() {
+	console.log("当前 key:value => " + cur_app_obj_key + '-' + cur_app_obj_value);
+	var value = $(this).val();
+	if(value == cur_app_obj_value) {
+		return;
+	} else {
+		cur_app_obj_value = value;
+		// 找到对应的key
+		for(var i=0; i<app_obj_arr.length;i++) {
+    		if (value == app_obj_arr[i]['value']) {
+	    		$('#p_app_obj_key').val(app_obj_arr[i]['key']);
+	    		cur_app_obj_key = app_obj_arr[i]['key'];
+	    		setTimeout('$("#p_app_obj_value").picker("close");', 1200);
+	    		break;
+    		}
+		}
+	}
+});
+*/
+$(document).ready(function(){
+	// 对于picker中的确定进行点击事件
+	// 说明：本来可以通过在picker的onClose事件进行配置，但是ios端有问题，所以采用delegate方式进行绑定
+  	$('body').on("click","#ok_app_obj", function(){
+		var p_app_obj_value = $("#p_app_obj_value");
+		var paov = p_app_obj_value.val();
+		if(paov == cur_app_obj_value) {
+			return;
+		} else {
+			cur_app_obj_value = paov;
+			// 找到对应的key
+			for(var i=0; i<app_obj_arr.length;i++) {
+	    		if (paov == app_obj_arr[i]['value']) {
+		    		$('#p_app_obj_key').val(app_obj_arr[i]['key']);
+		    		cur_app_obj_key = app_obj_arr[i]['key'];
+		    		//setTimeout('$("#p_app_obj_value").picker("close");', 1200);
+		    		// form提交
+		    		$("#form").submit();
+		    		break;
+	    		}
+			}
+		}
+  	});
+});
+</script>
+</body>
