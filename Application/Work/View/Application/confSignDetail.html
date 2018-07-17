@@ -82,14 +82,20 @@
         }
         .weui-cells_checkbox .weui-check:disabled + .weui-icon-checked:before{
             color: gray;
-            content: '\EA08';
+            /*content: '\EA08';*/
         }
+
         #cs_sign_tx_ok_btn>a {
             width: 90%;
             background-color: #0073dd;
         }
         .cs_unable_cell {
             color: gray;
+        }
+        #cs_qdmd {
+            margin-top: 5px;
+            background-color: #ffffff;
+            text-align: center;
         }
     </style>
 </head>
@@ -161,21 +167,32 @@
                                 <div class="weui-cell__ft"></div>
                             </div>
                         </div>
-                        <div class="weui-flex" id="cs_nav_way">
-                            <div class="weui-flex__item">
-                                <div class="placeholder cs_nav_way_item cs_nav_way_item_active" onclick="switch_nav_way(this, 'qdmd_div', 'qdtx_div')">签到名单</div>
-                            </div>
-                            <div class="weui-flex__item">
-                                <div class="placeholder cs_nav_way_item"  onclick="switch_nav_way(this, 'qdtx_div', 'qdmd_div')">签到填写</div>
-                            </div>
+                        <div class="weui-cells">
+                            <a class="weui-cell weui-cell_access" href="javascript:;">
+                                <div class="weui-cell__hd"><img src="__PUBLIC__/images/cs_reach.png" alt="" style="width:20px;margin-right:5px;display:block"></div>
+                                <div class="weui-cell__bd weui-cell_primary">
+                                    <p>与会人数:{$total_yh_cs_users}人</p>
+                                </div>
+                                <!--span class="weui-cell__ft"></span-->
+                            </a>
+                            <a class="weui-cell weui-cell_access" href="javascript:;">
+                                <div class="weui-cell__hd"><img src="__PUBLIC__/images/cs_unreach.png" alt="" style="width:20px;margin-right:5px;display:block"></div>
+                                <div class="weui-cell__bd weui-cell_primary">
+                                    <p>未与会人数:{$total_cs_users-$total_yh_cs_users}人</p>
+                                </div>
+                                <!--span class="weui-cell__ft"></span-->
+                            </a>
                         </div>
-                        <div class="weui-cells weui-cells_checkbox" id="qdmd_div">
+                        <div class="weui-flex" id="cs_qdmd">
+                            <div style="width:100%;color: black;text-align: center;background-color: #ebebeb;">签到名单</div>
+                        </div>
+                        <div class="weui-cells weui-cells_checkbox" id="qdmd_div" style="margin-top: 0px;">
                             <if condition="$cs_pre_users neq null">
                                 <php>$i = 0;</php>
                                 <foreach name="cs_pre_users" item="user">
-                                <label class="weui-cell weui-check__label <if condition="$user.sign_status eq 0">cs_checkable_label</if>" for="s{$i}">
+                                <label class="weui-cell weui-check__label cs_checkable_label" for="s{$i}">
                                     <div class="weui-cell__hd">
-                                        <input type="checkbox" class="weui-check" name="cs_name" id="s{$i}" value="{$user.user_name}" <if condition="$user.sign_status gt 0">checked="checked" disabled="disabled"</if>>
+                                        <input type="checkbox" class="weui-check" name="cs_name" id="s{$i}" value="{$user.user_name}" <if condition="$user.sign_status gt 0">checked="checked" disabled="disabled"<else/>disabled="disabled"</if> >
                                         <i class="weui-icon-checked"></i>
                                     </div>
                                     <if condition="$user.sign_status eq 0">
@@ -191,25 +208,6 @@
                                 <php>$i++;</php>
                                 </foreach>
                             </if>
-                            <div class="cs_sign_ok_btn cs_sign_md_ok_btn">
-                                确认签到
-                            </div>
-                        </div>
-                        <div class="weui-cells cs_item" id="qdtx_div" style="display: none; margin-top: 1.17647059em;">
-                            <div class="weui-cell">
-                                <div class="weui-cell__hd">
-                                          <img src="__PUBLIC__/images/cs_sign.png" alt style="width: 20px;margin-right: 5px;">签
-                            到人：
-                                </div>
-                                <div class="weui-cell__bd">
-                                    <input class="weui-input" type="text" placeholder="请输入本人姓名" id="sign_name_text" value="">
-                                </div>
-                                <div class="weui-cell__ft">
-                                </div>
-                            </div>
-                            <div class="weui-cell" id="cs_sign_tx_ok_btn">
-                                    <a href="javascript:;" class="weui-btn weui-btn_primary cs_sign_ok_btn" id=cs_sign_tx_ok_btn>确认签到</a>
-                            </div>
                         </div>
                     </div>
                 <!--/div-->
@@ -217,7 +215,6 @@
                 <div id="toast" style="opacity: 100; display: none;">
                     <div class="weui-mask_transparent"></div>
                     <div class="weui-toast">
-                        <!--i class="weui-icon-success-no-circle weui-icon_toast"></i-->
                         <i class="weui-icon-warn weui-icon_toast"></i>
                         <p class="weui-toast__content">已完成</p>
                     </div>

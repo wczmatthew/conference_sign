@@ -59,6 +59,9 @@
         .weui-input {
             width: 80%;
         }
+        .weui-cell_access .weui-cell__ft:after {
+            border-width: 0px 2px 2px 0;
+        }
     </style>
 </head>
 <body ontouchstart>
@@ -114,82 +117,117 @@
                                     
                                 </div>
                                 <div class="weui-cell__bd">
-                                    <textarea class="weui-textarea" placeholder="请输入会议内容" rows="3"></textarea>
+                                    <textarea class="weui-textarea" placeholder="请输入会议内容" rows="3" id="cs_content" wrap="hard" cols="3"></textarea>
                                     <!--div class="weui-textarea-counter"><span>0</span>/200</div-->
                                 </div>
                                 <div class="weui-cell__ft"></div>
                             </div>
                         </div>
 		                <div class="weui-cells cs_item">
-                        	<div class="weui-cell">
-                        		<div class="weui-cell__hd">
+                        	<div class="weui-cell" style="padding-right: 0px;">
+                        		<div class="weui-cell__hd" style="width: 40%;">
                         			<img src="__PUBLIC__/images/cs_time.png" alt style="width: 20px;">
-                                    <span style="position: relative;top: 15px;">会议时间：</span>
+                                    <span style="position: relative;top: -5px;">会议时间：</span>
                         		</div>
-                        		<div class="weui-cell__bd">
-                        			<!--span style="position: relative;top: 15px;">会议时间：</span--><input class="weui-input" type="datetime-local" value="" placeholder="" style="position: relative;top: -17px;left: 5em;">
-                        		</div>
-                        		<div class="weui-cell__ft"></div>
-                        	</div>
-                        </div>
-                        <div class="weui-cells cs_item">
-                        	<div class="weui-cell">
-                        		<div class="weui-cell__hd">
-                        			<img src="__PUBLIC__/images/cs_addr.png" alt style="width: 20px;margin-right: 5px;display: block;">
-                        		</div>
-                        		<div class="weui-cell__bd">
-                        			<p>会议地点：{$cs_info['addr']}</p>
+                        		<div class="weui-cell__bd" style="width: 60%;">
+                        			<!--span style="position: relative;top: 15px;">会议时间：</span--><input class="weui-input" type="datetime-local" value="" placeholder="" id="cs_start_time" style="width: 100%;position: relative;left: 0em;top: -6px;">
                         		</div>
                         		<div class="weui-cell__ft"></div>
                         	</div>
                         </div>
                         <div class="weui-cells cs_item">
-                        	<div class="weui-cell">
-                        		<div class="weui-cell__hd">
-                        			<img src="__PUBLIC__/images/cs_host_man.png" alt style="width: 20px;margin-right: 5px;display: block;">
-                        		</div>
-                        		<div class="weui-cell__bd">
-                        			<p>主会人：{$cs_info['host_user']}</p>
-                        		</div>
-                        		<div class="weui-cell__ft"></div>
-                        	</div>
+                            <div class="weui-cell" style="padding-right: 0px;">
+                                <div class="weui-cell__hd" style="width: 40%;">
+                                    <img src="__PUBLIC__/images/cs_addr.png" alt style="width: 20px;">
+                                    <span style="position: relative;top: -5px;">会议地点：</span>
+                                </div>
+                                <div class="weui-cell__bd" style="width: 60%;">
+                                    <input class="weui-input" type="text" placeholder="请输入会议地点" id="cs_addr" value="" style="width: 100%;position: relative;left: 0em;top: -6px;">
+                                </div>
+                                <div class="weui-cell__ft"></div>
+                            </div>
                         </div>
+                        <div class="weui-cells cs_item">
+                            <div class="weui-cell cs-cell" style="padding-right: 0px;">
+                                <div class="weui-cell__hd" style="width: 40%;">
+                                    <img src="__PUBLIC__/images/cs_host_man.png" alt style="width: 20px;">
+                                    <span style="position: relative;top: -5px;">主会人：</span>
+                                </div>
+                                <div class="weui-cell__bd" style="width: 60%;">
+                                    <input class="weui-input" type="text" placeholder="请输入主会人" id="cs_host_man" value="" style="width: 100%;position: relative;left: 0em;top: -6px;">
+                                </div>
+                                <div class="weui-cell__ft"></div>
+                            </div>
+                        </div>
+                        <div class="weui-cells cs_item" style="margin-top: 5px;">
+                            <div class="weui-cell weui-cell_access">
+                                <div class="weui-cell__hd">
+                                    <img src="__PUBLIC__/images/cs_title.png" alt style="width: 20px;margin-right: 5px;display: block;">
+                                </div>
+                                <div class="weui-cell__bd">
+                                    <p>保密等级</p>
+                                </div>
+                                <div class="weui-cell__ft"></div>
+                            </div>
+                        </div>
+                        <div class="weui-cells weui-cells_radio" style="padding: 0px 1.5em;margin-top: 0px;">
+                            <label class="weui-cell weui-check__label" for="x11">
+                                <div class="weui-cell__bd">
+                                    <p>绝密</p>
+                                </div>
+                                <div class="weui-cell__ft">
+                                    <input type="radio" class="weui-check" name="radio1" id="x11"  value="juemi-secret">
+                                    <span class="weui-icon-checked"></span>
+                                </div>
+                            </label>
+                            <label class="weui-cell weui-check__label" for="x12">
+                                <div class="weui-cell__bd">
+                                    <p>机密</p>
+                                </div>
+                                <div class="weui-cell__ft">
+                                    <input type="radio" name="radio1" class="weui-check" id="x12" value="jimi-secret">
+                                    <span class="weui-icon-checked"></span>
+                                </div>
+                            </label>
+                            <label class="weui-cell weui-check__label" for="x13">
+                                <div class="weui-cell__bd">
+                                    <p>秘密</p>
+                                </div>
+                                <div class="weui-cell__ft">
+                                    <input type="radio" name="radio1" class="weui-check" id="x13" value="mimi-secret">
+                                    <span class="weui-icon-checked"></span>
+                                </div>
+                            </label>
+                            <label class="weui-cell weui-check__label" for="x14">
 
-                        <div class="weui-cells cs_item" id="cs_sign">
-                        	<div class="weui-cell">
-                        		<div class="weui-cell__hd">
-                        			<img src="__PUBLIC__/images/cs_sign.png" alt style="width: 20px;margin-right: 5px;">签到人：
-                        		</div>
-                        		<div class="weui-cell__bd">
-                        			<select class="weui-select" id="sign_list_sel" style="display: none;" onchange="signerChange(this)">
-                                        <if condition="$cs_pre_users neq null">
-                                            <foreach name="cs_pre_users" item="user">
-                                            <option value="{$user.user_name}">{$user.user_name}</option>
-                                            </foreach>
-                                        </if>
-                                        <!--
-                        				<option value="张三1">张三</option>
-                        				<option value="李四1">李四</option>
-                        				<option value="王五1">王五</option>
-                                    -->
-                        			</select>
-                        			<input class="weui-input" type="text" placeholder="请输入本人姓名" id="sign_name_text" value="">
-                        		</div>
-                        		<div class="weui-cell__ft"><img src="__PUBLIC__/images/cs_host_man.png" alt style="width: 15px;margin-left: 5px;display: block;" id="showSignUsersSel" onclick1="showSignListSel1();"></div>
-                        	</div>
+                                <div class="weui-cell__bd">
+                                    <p>不保密</p>
+                                </div>
+                                <div class="weui-cell__ft">
+                                    <input type="radio" name="radio1" class="weui-check" id="x14" value="no-secret" checked="checked">
+                                    <span class="weui-icon-checked"></span>
+                                </div>
+                            </label>
                         </div>
                         <div class="page__bd page__bd_spacing" id="cs_sign_ok">
-                            <a href="javascript:;" class="weui-btn weui-btn_primary" id="sign_ok_btn">确认签到</a>
+                            <a href="javascript:;" class="weui-btn weui-btn_primary" id="add_cs_ok_btn">保存</a>
                         </div>
                     </div>
                 <!--/div-->
                 <!-- toast -->
-                <div id="toast" style="opacity: 100; display: none;">
+                <div id="toast" style="opacity: 1; display: none;">
                     <div class="weui-mask_transparent"></div>
                     <div class="weui-toast">
                         <!--i class="weui-icon-success-no-circle weui-icon_toast"></i-->
                         <i class="weui-icon-warn weui-icon_toast"></i>
                         <p class="weui-toast__content">已完成</p>
+                    </div>
+                </div>
+                <div id="loadingToast" style="opacity: 1; display: none;">
+                    <div class="weui-mask_transparent"></div>
+                    <div class="weui-toast">
+                        <i class="weui-loading weui-icon_toast"></i>
+                        <p class="weui-toast__content">数据加载中</p>
                     </div>
                 </div>
             </div>
@@ -198,7 +236,89 @@
     <script src="__PUBLIC__/js/zepto.min.js"></script>
     <script src="https://res.wx.qq.com/open/libs/weuijs/1.0.0/weui.min.js"></script>
     <script type="text/javascript">
-   
+    var toast = $('#toast');
+    $(document).ready(function(){
+        $('#add_cs_ok_btn').click(function(){
+            var cs_title        = $("#cs_title")        .val();
+            var cs_content      = $("#cs_content")      .val();
+            var cs_start_time   = $("#cs_start_time")   .val();
+            var cs_addr         = $("#cs_addr")         .val();
+            var cs_host_man     = $("#cs_host_man")     .val();
+            var cs_level        = '';
+            $("[name='radio1']").each(function(){
+                var chk_status = $(this).prop("checked");
+                if(chk_status) {
+                    cs_level = $(this).val();
+                }
+            });
+
+            if(cs_title == '') {
+                showFeedMsg('会议主题不能为空');
+                return false;
+            }
+
+            if(cs_content == '') {
+                showFeedMsg('会议内容不能为空');
+                return false;
+            }
+
+            if(cs_start_time == '') {
+                showFeedMsg('会议开始时间不能为空');
+                return false;
+            }
+
+            if(cs_addr == ''){
+                showFeedMsg('会议地点不能为空');
+                return false;
+            }
+
+            if(cs_host_man == '') {
+                showFeedMsg('主会人不能为空');
+                return false;
+            }
+
+            var $loadingToast = $('#loadingToast');
+            if ($loadingToast.css('display') != 'none') return;
+            $loadingToast.fadeIn(100);
+
+            $.ajax({
+                type: "post",
+                url: "{:U('Application/doAddConferenceSign')}",
+                data: {
+                    TITLE:           cs_title,
+                    CONTENT:         cs_content,
+                    ADDR:            cs_addr,
+                    START_TIME:      cs_start_time,
+                    HOST_MAN:        cs_host_man,
+                    LEVEL:           cs_level 
+                },
+                dataType: "json",
+                async: true,
+                success: function(res) {
+                    $loadingToast.fadeOut(100);
+                    if(res.code == 1) {
+                        showFeedMsg(res.msg);
+                        location.href = "{:U('Application/conferenceSignList')}";
+                    } else {
+                        showFeedMsg(res.msg);
+                    }
+                },
+                error: function(xmlHttpRequest, textStatus, errorThrown) {
+                    alert('系统异常，请联系主会人');
+                }
+            });
+        });
+    });
+    function showFeedMsg(msg) {
+        var toast = $('#toast');
+        if (toast.css('display') != 'none') return;
+        toast.find('i').removeClass('weui-icon-success-no-circle').addClass('weui-icon-warn');
+        toast.find('.weui-toast__content').text(msg);
+        toast.fadeIn(1000);
+        setTimeout(function () {
+            toast.fadeOut(1000);
+        }, 2000);
+    }
     </script>
 </body>
 </html>

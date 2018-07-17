@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <title>{:C('TITLE_NAME')}</title>
+    <!--link rel="stylesheet" href="http://www.runoob.com/try/weui/style/weui.css"/ -->
+    <link rel="stylesheet" href="__PUBLIC__/css/weui.min.css"/>
+    <link rel="stylesheet" href="__PUBLIC__/css/example.css"/>
+    <style type="text/css">
+        #sdd_header {
+            background-color: #0073dd;
+            color: white;
+        }
+        #sdd_header {
+            margin: 0px;
+        }
+        .cs_item {
+            margin-top: 0px;
+        }
+        .cs_item:after {
+            border-bottom: 0px solid #e5e5e5;
+        }
+        #cs_content{
+            background-color: #ffffff;
+            padding-top: 0px;
+        }
+        #cs_content:before{
+            border-top: 0px solid #e5e5e5;
+        }
+        #cs_sign_ok>a {
+            background-color: #0073dd;
+            margin-top: 30px;
+        }
+        .weui-cells:before {
+            border-top: 0px solid #e5e5e5;
+        }
+        #cs_content_detail {
+            display: block;
+            padding: 2px 10px;
+        }
+        #cs_sign{
+            margin-top: 5px;
+        }
+        .import_text {
+            text-decoration: underline;
+            font-weight: 900;
+        }
+        .import_text:before {
+            content: '\00A0\00A0';
+        }
+        .import_text:after {
+            content: '\00A0\00A0';
+        }
+        #cs_nav_way {
+            margin-top: 5px;
+            background-color: #ffffff;
+        }
+        .page.flex  .placeholder.cs_nav_way_item {
+            background-color: #ffffff;
+            margin: 0px 5px;
+            color: gray;
+        }
+        .page.flex  .placeholder.cs_nav_way_item.cs_nav_way_item_active{
+            border-bottom: 3px solid #0073dd;
+            color: black;
+        }
+        .cs_sign_md_ok_btn {
+            z-index: 99999;
+            position: fixed;
+            bottom: 0px;
+            width: 100%;
+            text-align: center;
+            background-color: #0073dd;
+            color: white;
+            padding-top: 5px;
+            padding-bottom: 5px;
+        }
+        .weui-cells_checkbox .weui-check:checked + .weui-icon-checked:before{
+            color: #0073dd;
+            content: '\EA08';
+        }
+        .weui-cells_checkbox .weui-check:disabled + .weui-icon-checked:before{
+            color: gray;
+            content: '\EA08';
+        }
+        #cs_sign_tx_ok_btn>a {
+            width: 90%;
+            background-color: #0073dd;
+        }
+        .cs_unable_cell {
+            color: gray;
+        }
+        #create_cs_btn {
+            margin-top:3px;
+            margin-bottom: 3px;
+            width: 80%;
+            border-color: #0073dd;
+            color: #0073dd;
+            line-height: 1.55555556;
+        }
+        .weui-panel__bd>a {
+            padding: 2px;
+        }
+        .weui-cell__ft:after {
+            content: " ";
+            display: inline-block;
+            height: 6px;
+            width: 6px;
+            border-width: 2px 2px 0 0;
+            border-color: #C8C8CD;
+            border-style: solid;
+            -webkit-transform: matrix(0.71, 0.71, -0.71, 0.71, 0, 0);
+            transform: matrix(0.71, 0.71, -0.71, 0.71, 0, 0);
+            position: relative;
+            top: -2px;
+            position: absolute;
+            top: 50%;
+            margin-top: -4px;
+            margin-right: 1em;
+            right: 2px;
+        }
+    </style>
+</head>
+<body ontouchstart>
+    <div class="container">
+        <div class="page tabbar badge button flex uploader js_show">
+            <div class="page__bd input page__bd_spacing" style="height: 100%; padding: 0;">
+                <div class="weui-tab">
+                    <div class="weui-tab__panel" id="panel-1">
+                        <div class="weui-flex">
+                            <div class="weui-flex__item"><div class="placeholder" id="sdd_header" >会议签到列表</div></div>
+                        </div>
+                        <a class="weui-btn weui-btn_plain-primary" id="create_cs_btn" href="{:U('Application/addConferenceSign')}">创建会议签到</a>
+                        <if condition="$conf_sign_list eq null">
+                        空
+                        <else/>
+                        <div class="weui-panel weui-panel_access" style="margin-top: 0px;">
+                            <div class="weui-panel__bd">
+                                <foreach name="conf_sign_list" item="conf_sign">
+                                <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg"  onclick="confSignDetail({$conf_sign.cs_id})">
+                                    <div class="weui-media-box__bd">
+                                        <div class="weui-media-box weui-media-box_text">
+                                            <h4 class="weui-media-box__title">{$conf_sign.title}</h4>
+                                            <p class="weui-media-box__desc">
+                                            时间:{$conf_sign.start_time|substr=0,16}<br/>
+                                            地点:{$conf_sign.addr}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <!--span class="weui-cell__ft q_status">
+                                    OK<br/>
+                                    </span-->
+                                    <span class="weui-cell__ft"></span>
+                                </a>
+                                </foreach>
+                            </div>
+                            <!--div class="weui-panel__ft">
+                                <a href="javascript:void(0);" class="weui-cell weui-cell_access weui-cell_link">
+                                    <div class="weui-cell__bd">查看更多</div>
+                                    <span class="weui-cell__ft"></span>
+                                </a>    
+                            </div-->
+                        </div>
+                        </if>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="__PUBLIC__/js/zepto.min.js"></script>
+    <script src="https://res.wx.qq.com/open/libs/weuijs/1.0.0/weui.min.js"></script>
+    <script type="text/javascript">
+    function confSignDetail(cs_id) {
+        location.href = "{:U('Application/confSignDetail')}"+'?cs_id='+cs_id;
+    }
+    </script>
+</body>
+</html>
