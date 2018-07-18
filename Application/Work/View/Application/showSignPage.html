@@ -134,7 +134,7 @@
                                     <img src="__PUBLIC__/images/cs_time.png" alt style="width: 20px;margin-right: 5px;display: block;">
                                 </div>
                                 <div class="weui-cell__bd">
-                                    <p>开始时间：{$cs_info['start_time']}</p>
+                                    <p>开始时间：{$cs_info.start_time|substr=0,16}</p>
                                 </div>
                                 <div class="weui-cell__ft"></div>
                             </div>
@@ -170,9 +170,9 @@
                             </div>
                         </div>
                         <div class="weui-cells weui-cells_checkbox" id="qdmd_div">
-                            <if condition="$cs_pre_users neq null">
+                            <if condition="$merge_users neq null">
                                 <php>$i = 0;</php>
-                                <foreach name="cs_pre_users" item="user">
+                                <foreach name="merge_users" item="user">
                                 <label class="weui-cell weui-check__label <if condition="$user.sign_status eq 0">cs_checkable_label</if>" for="s{$i}">
                                     <div class="weui-cell__hd">
                                         <input type="checkbox" class="weui-check" name="cs_name" id="s{$i}" value="{$user.user_name}" <if condition="$user.sign_status gt 0">checked="checked" disabled="disabled"</if>>
@@ -244,7 +244,6 @@
                 var that = this;
                 cur_check_item = that;
                 sign_username = $(that).find('.weui-check').val();
-                console.log("当前签到人 = " + sign_username);
                 $(".cs_checkable_label").each(function(){
                     if (that != this) {
                         var this_chkbox = $(this).find('.weui-check');
@@ -303,9 +302,7 @@
         var toast = $('#toast');
         //var sign_username = $('#sign_name_text').val();
         //alert('id:user => ' + cs_id +'-' + sign_username);
-        console.log('提交啦 = ' + cur_sign_way + '-' + sign_username);
         if(cur_sign_way == 'qdtx_div') {
-            console.log("现在是填写模式 = " + cur_sign_way);
             sign_username = $('#sign_name_text').val();
         }
 
@@ -342,28 +339,27 @@
                 else if(res.code == 2) {
                     toast.find('i').removeClass('weui-icon-success-no-circle').addClass('weui-icon-warn');
                     toast.find('.weui-toast__content').text(res.msg);
-                    $("#sign_ok_btn").removeClass("weui-btn_primary").addClass('weui-btn_disabled weui-btn_default').css('background-color', '#F7F7F7').css('color', 'rgba(0, 0, 0, 0.3)');
-                        $("#sign_ok_btn").unbind();
                     toast.fadeIn(1000);
                     setTimeout(function () {
                         toast.fadeOut(1000);
-                        window.close();
+                        $("#sign_ok_btn").removeClass("weui-btn_primary").addClass('weui-btn_disabled weui-btn_default').css('background-color', '#F7F7F7').css('color', 'rgba(0, 0, 0, 0.3)');
+                        $("#sign_ok_btn").unbind();
                     }, 2000);
 
                 } // 签到成功
                 else if(res.code == 1) {
                     toast.find('.weui-toast__content').text(res.msg);
-                    $("#sign_ok_btn").removeClass("weui-btn_primary").addClass('weui-btn_disabled weui-btn_default').css('background-color', '#F7F7F7').css('color', 'rgba(0, 0, 0, 0.3)');
-                        $("#sign_ok_btn").unbind();
-                    // 并设置checkbox为不可点击
-                    $(cur_check_item).removeClass('cs_checkable_label');
-                    $(cur_check_item).find('.weui-check').attr('disabled', 'disabled');
-                    $(cur_check_item).find('.weui-cell__bd').addClass('cs_unable_cell');
-                    $(cur_check_item).find('.weui-cell__bd>span').append('<span style="float:right;">已签到</span>');
                     toast.fadeIn(1000);
                     setTimeout(function () {
                         toast.fadeOut(1000);
-                        window.close();
+                        // 并设置checkbox为不可点击
+                        $("#sign_ok_btn").removeClass("weui-btn_primary").addClass('weui-btn_disabled weui-btn_default').css('background-color', '#F7F7F7').css('color', 'rgba(0, 0, 0, 0.3)');
+                        $("#sign_ok_btn").unbind();
+
+                        $(cur_check_item).removeClass('cs_checkable_label');
+                        $(cur_check_item).find('.weui-check').attr('disabled', 'disabled');
+                        $(cur_check_item).find('.weui-cell__bd').addClass('cs_unable_cell');
+                        $(cur_check_item).find('.weui-cell__bd>span').append('<span style="float:right;">已签到</span>');
                     }, 2000);
                 } else {
                     toast.find('i').removeClass('weui-icon-success-no-circle').addClass('weui-icon-warn');
@@ -371,7 +367,6 @@
                     toast.fadeIn(1000);
                     setTimeout(function () {
                         toast.fadeOut(1000);
-                        window.close();
                     }, 2000);
                 }
             },

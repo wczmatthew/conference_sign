@@ -133,7 +133,9 @@
                         </div>
                         <a class="weui-btn weui-btn_plain-primary" id="create_cs_btn" href="{:U('Application/addConferenceSign')}">创建会议签到</a>
                         <if condition="$conf_sign_list eq null">
-                        空
+                        <div class="weui-flex">
+                            <div class="weui-flex__item"><div class="placeholder">暂无会议签到</div></div>
+                        </div>
                         <else/>
                         <div class="weui-panel weui-panel_access" style="margin-top: 0px;">
                             <div class="weui-panel__bd">

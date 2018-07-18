@@ -76,7 +76,7 @@
                 <!--div class="weui-tab"-->
                     <div class="weui-tab__panel" id="panel-1">
                         <div class="weui-flex">
-                            <div class="weui-flex__item"><div class="placeholder" id="sdd_header" >签到</div></div>
+                            <div class="weui-flex__item"><div class="placeholder" id="sdd_header" >创建会议签到</div></div>
                         </div>
                         <div class="weui-cells cs_item">
                         	<div class="weui-cell">
@@ -125,11 +125,11 @@
                         </div>
 		                <div class="weui-cells cs_item">
                         	<div class="weui-cell" style="padding-right: 0px;">
-                        		<div class="weui-cell__hd" style="width: 40%;">
+                        		<div class="weui-cell__hd" style="width: 36%;">
                         			<img src="__PUBLIC__/images/cs_time.png" alt style="width: 20px;">
                                     <span style="position: relative;top: -5px;">会议时间：</span>
                         		</div>
-                        		<div class="weui-cell__bd" style="width: 60%;">
+                        		<div class="weui-cell__bd" style="width: 64%;">
                         			<!--span style="position: relative;top: 15px;">会议时间：</span--><input class="weui-input" type="datetime-local" value="" placeholder="" id="cs_start_time" style="width: 100%;position: relative;left: 0em;top: -6px;">
                         		</div>
                         		<div class="weui-cell__ft"></div>
@@ -137,11 +137,11 @@
                         </div>
                         <div class="weui-cells cs_item">
                             <div class="weui-cell" style="padding-right: 0px;">
-                                <div class="weui-cell__hd" style="width: 40%;">
+                                <div class="weui-cell__hd" style="width: 36%;">
                                     <img src="__PUBLIC__/images/cs_addr.png" alt style="width: 20px;">
                                     <span style="position: relative;top: -5px;">会议地点：</span>
                                 </div>
-                                <div class="weui-cell__bd" style="width: 60%;">
+                                <div class="weui-cell__bd" style="width: 64%;">
                                     <input class="weui-input" type="text" placeholder="请输入会议地点" id="cs_addr" value="" style="width: 100%;position: relative;left: 0em;top: -6px;">
                                 </div>
                                 <div class="weui-cell__ft"></div>
@@ -149,12 +149,12 @@
                         </div>
                         <div class="weui-cells cs_item">
                             <div class="weui-cell cs-cell" style="padding-right: 0px;">
-                                <div class="weui-cell__hd" style="width: 40%;">
+                                <div class="weui-cell__hd" style="width: 36%;">
                                     <img src="__PUBLIC__/images/cs_host_man.png" alt style="width: 20px;">
                                     <span style="position: relative;top: -5px;">主会人：</span>
                                 </div>
-                                <div class="weui-cell__bd" style="width: 60%;">
-                                    <input class="weui-input" type="text" placeholder="请输入主会人" id="cs_host_man" value="" style="width: 100%;position: relative;left: 0em;top: -6px;">
+                                <div class="weui-cell__bd" style="width: 64%;">
+                                    <input class="weui-input" type="text" placeholder="请输入主会人" id="cs_host_user" value="" style="width: 100%;position: relative;left: 0em;top: -6px;">
                                 </div>
                                 <div class="weui-cell__ft"></div>
                             </div>
@@ -176,7 +176,7 @@
                                     <p>绝密</p>
                                 </div>
                                 <div class="weui-cell__ft">
-                                    <input type="radio" class="weui-check" name="radio1" id="x11"  value="juemi-secret">
+                                    <input type="radio" class="weui-check" name="radio1" id="x11"  value="3">
                                     <span class="weui-icon-checked"></span>
                                 </div>
                             </label>
@@ -185,7 +185,7 @@
                                     <p>机密</p>
                                 </div>
                                 <div class="weui-cell__ft">
-                                    <input type="radio" name="radio1" class="weui-check" id="x12" value="jimi-secret">
+                                    <input type="radio" name="radio1" class="weui-check" id="x12" value="2">
                                     <span class="weui-icon-checked"></span>
                                 </div>
                             </label>
@@ -194,7 +194,7 @@
                                     <p>秘密</p>
                                 </div>
                                 <div class="weui-cell__ft">
-                                    <input type="radio" name="radio1" class="weui-check" id="x13" value="mimi-secret">
+                                    <input type="radio" name="radio1" class="weui-check" id="x13" value="1">
                                     <span class="weui-icon-checked"></span>
                                 </div>
                             </label>
@@ -204,7 +204,7 @@
                                     <p>不保密</p>
                                 </div>
                                 <div class="weui-cell__ft">
-                                    <input type="radio" name="radio1" class="weui-check" id="x14" value="no-secret" checked="checked">
+                                    <input type="radio" name="radio1" class="weui-check" id="x14" value="0" checked="checked">
                                     <span class="weui-icon-checked"></span>
                                 </div>
                             </label>
@@ -243,7 +243,7 @@
             var cs_content      = $("#cs_content")      .val();
             var cs_start_time   = $("#cs_start_time")   .val();
             var cs_addr         = $("#cs_addr")         .val();
-            var cs_host_man     = $("#cs_host_man")     .val();
+            var cs_host_user    = $("#cs_host_user")   .val();
             var cs_level        = '';
             $("[name='radio1']").each(function(){
                 var chk_status = $(this).prop("checked");
@@ -272,7 +272,7 @@
                 return false;
             }
 
-            if(cs_host_man == '') {
+            if(cs_host_user == '') {
                 showFeedMsg('主会人不能为空');
                 return false;
             }
@@ -289,7 +289,7 @@
                     CONTENT:         cs_content,
                     ADDR:            cs_addr,
                     START_TIME:      cs_start_time,
-                    HOST_MAN:        cs_host_man,
+                    HOST_USER:       cs_host_user,
                     LEVEL:           cs_level 
                 },
                 dataType: "json",

@@ -111,7 +111,7 @@
                 <!--div class="weui-tab"-->
                     <div class="weui-tab__panel" id="panel-1">
                         <div class="weui-flex">
-                            <div class="weui-flex__item"><div class="placeholder" id="sdd_header" >签到</div></div>
+                            <div class="weui-flex__item"><div class="placeholder" id="sdd_header" >会议签到详情</div></div>
                         </div>
                         <div class="weui-cells cs_item">
                             <div class="weui-cell">
@@ -140,7 +140,7 @@
                                     <img src="__PUBLIC__/images/cs_time.png" alt style="width: 20px;margin-right: 5px;display: block;">
                                 </div>
                                 <div class="weui-cell__bd">
-                                    <p>开始时间：{$cs_info['start_time']}</p>
+                                    <p>开始时间：{$cs_info.start_time|substr=0,16}</p>
                                 </div>
                                 <div class="weui-cell__ft"></div>
                             </div>
@@ -183,13 +183,40 @@
                                 <!--span class="weui-cell__ft"></span-->
                             </a>
                         </div>
+                        <div class="weui-cells cs_item">
+                            <div class="weui-cell">
+                                <div class="weui-cell__hd">
+                                    <img src="__PUBLIC__/images/cs_title.png" alt style="width: 20px;margin-right: 5px;display: block;">
+                                </div>
+                                <div class="weui-cell__bd">
+                                    <p>URL(生成二维码打印，长按复制)</p>
+                                </div>
+                                <div class="weui-cell__ft"></div>
+                            </div>
+                        </div>
+                        <div class="weui-cells cs_item">
+                            <div class="weui-cell cs_layout">
+                                <div class="weui-cell__hd">
+                                    
+                                </div>
+                                <div class="weui-cell__bd">
+                                    <input class="weui-input" type="text" value="{:C('SITE_URL')}{:U('Work/Application/showSignPage', array('cs_id' => $cs_id))}">
+                                </div>
+                                <div class="weui-cell__ft"></div>
+                            </div>
+                        </div>
+                        <if condition="$merge_users eq null">
+                        <div class="weui-flex" id="cs_qdmd">
+                            <div style="width:100%;text-align: center;background-color: #ebebeb;">暂无签到人员名单</div>
+                        </div>
+                        <else/>
                         <div class="weui-flex" id="cs_qdmd">
                             <div style="width:100%;color: black;text-align: center;background-color: #ebebeb;">签到名单</div>
                         </div>
                         <div class="weui-cells weui-cells_checkbox" id="qdmd_div" style="margin-top: 0px;">
-                            <if condition="$cs_pre_users neq null">
+                            <if condition="$merge_users neq null">
                                 <php>$i = 0;</php>
-                                <foreach name="cs_pre_users" item="user">
+                                <foreach name="merge_users" item="user">
                                 <label class="weui-cell weui-check__label cs_checkable_label" for="s{$i}">
                                     <div class="weui-cell__hd">
                                         <input type="checkbox" class="weui-check" name="cs_name" id="s{$i}" value="{$user.user_name}" <if condition="$user.sign_status gt 0">checked="checked" disabled="disabled"<else/>disabled="disabled"</if> >
@@ -197,11 +224,17 @@
                                     </div>
                                     <if condition="$user.sign_status eq 0">
                                     <div class="weui-cell__bd">
-                                        <span>{$user.user_name}</span>    
+                                        <span>{$user.user_name}</span>  
+                                        <span style="float:right;">
+                                        未签到
+                                        </span>   
                                     </div>
                                     <else/>
                                     <div class="weui-cell__bd cs_unable_cell">
-                                        <span>{$user.user_name}</span><span style="float:right;">已签到</span>   
+                                        <span>{$user.user_name}</span>
+                                        <span style="float:right;">
+                                        已签到
+                                        </span>   
                                     </div>
                                     </if>
                                 </label>
@@ -209,6 +242,7 @@
                                 </foreach>
                             </if>
                         </div>
+                        </if>
                     </div>
                 <!--/div-->
                 <!-- toast -->
@@ -225,158 +259,7 @@
     <script src="__PUBLIC__/js/zepto.min.js"></script>
     <script src="https://res.wx.qq.com/open/libs/weuijs/1.0.0/weui.min.js"></script>
     <script type="text/javascript">
-    var sign_list_sel   = $('#sign_list_sel');
-    var sign_name_text  = $('#sign_name_text');
-    // 当前被选中的
-    var cur_check_item = null;  
-    $(document).ready(function(){
-        // 处理content详情的换行符
-        var c_d_p_text = $("#cs_content_detail_p").html();
-        var new_c_d_p_text = getFormatCode(c_d_p_text);
-        $("#cs_content_detail_p").html(new_c_d_p_text);
-
-        // 处理待签到人员列表的唯一选择处理
-        $(".cs_checkable_label").each(function() {
-            $(this).change(function(){
-                var that = this;
-                cur_check_item = that;
-                sign_username = $(that).find('.weui-check').val();
-                console.log("当前签到人 = " + sign_username);
-                $(".cs_checkable_label").each(function(){
-                    if (that != this) {
-                        var this_chkbox = $(this).find('.weui-check');
-                        var other_checked = this_chkbox.prop("checked");
-                        if(other_checked) {
-                           this_chkbox.prop("checked", false);
-                        }
-                    } 
-                });
-            });
-        }); 
-       
-        $("#showSignUsersSel").click(function() {
-            sign_name_text.css('display', 'none');
-            sign_list_sel.css('display', 'block');
-            // 如果input为空，将第一个option放入
-            var first_opt = $('option');
-            if (sign_name_text.val() == '') {
-                sign_name_text.val(first_opt);
-            }
-            open(sign_list_sel);
-            //sign_list_sel.click();
-            
-            //sign_list_sel.trigger('click').trigger('change');
-        });
-    });
-
-    var getFormatCode=function(strValue){
-        return strValue.replace(/\r\n/g, '<br/>').replace(/\n/g, '<br/>').replace(/\s/g, ' ');
-    }
-
-    /*
-     *  切换cs_nav_way即签到方式
-     */
-    function switch_nav_way(obj, desc_div, cur_div) {
-        console.log("目标div = " + desc_div);
-        if($(obj).hasClass('cs_nav_way_item_active')) {
-            return;
-        }
-        // 获取当前激活的way
-        var cur_nav_way = $(".cs_nav_way_item_active");
-        cur_sign_way = desc_div;
-        // 将当前设置为非激活，并让签到区none
-        cur_nav_way.removeClass('cs_nav_way_item_active');
-        $("#"+cur_div).css('display', 'none');
-
-        $(obj).addClass('cs_nav_way_item_active');
-        $('#'+desc_div).css('display', 'block');
-    }
-    var cs_id = "{$cs_info['cs_id']}";
-    // 签到人姓名
-    var sign_username = '';
-    // 当前签到模式 (qdmd_div, qdtx_div)
-    var cur_sign_way = 'qdmd_div';
-    $(".cs_sign_ok_btn").click(function() {
-        var toast = $('#toast');
-        //var sign_username = $('#sign_name_text').val();
-        //alert('id:user => ' + cs_id +'-' + sign_username);
-        console.log('提交啦 = ' + cur_sign_way + '-' + sign_username);
-        if(cur_sign_way == 'qdtx_div') {
-            console.log("现在是填写模式 = " + cur_sign_way);
-            sign_username = $('#sign_name_text').val();
-        }
-
-        if(sign_username == null || sign_username == '') {
-            toast.find('i').removeClass('weui-icon-success-no-circle').addClass('weui-icon-warn');
-            toast.find('.weui-toast__content').text('签到人姓名不能为空');
-            toast.fadeIn(1000);
-            setTimeout(function () {
-                toast.fadeOut(1000);
-            }, 2000);
-            return false;
-        }
-        $.ajax({
-            type: "post",
-            url: "{:U('Application/doConferenceSign')}",
-            data: {
-                cs_id:          cs_id,
-                sign_username:  sign_username,
-            },
-            dataType: "json",
-            async: true,
-            success: function(res) {
-                var toast = $('#toast');
-                if (toast.css('display') != 'none') return;
-                if(res.code == 3) {
-                    toast.find('i').removeClass('weui-icon-success-no-circle').addClass('weui-icon-warn');
-                    toast.find('.weui-toast__content').text(res.msg);
-                    toast.fadeIn(1000);
-                    setTimeout(function () {
-                        toast.fadeOut(1000);
-                    }, 2000);
-                } 
-                // 已经签到过
-                else if(res.code == 2) {
-                    toast.find('i').removeClass('weui-icon-success-no-circle').addClass('weui-icon-warn');
-                    toast.find('.weui-toast__content').text(res.msg);
-                    $("#sign_ok_btn").removeClass("weui-btn_primary").addClass('weui-btn_disabled weui-btn_default').css('background-color', '#F7F7F7').css('color', 'rgba(0, 0, 0, 0.3)');
-                        $("#sign_ok_btn").unbind();
-                    toast.fadeIn(1000);
-                    setTimeout(function () {
-                        toast.fadeOut(1000);
-                        window.close();
-                    }, 2000);
-
-                } // 签到成功
-                else if(res.code == 1) {
-                    toast.find('.weui-toast__content').text(res.msg);
-                    $("#sign_ok_btn").removeClass("weui-btn_primary").addClass('weui-btn_disabled weui-btn_default').css('background-color', '#F7F7F7').css('color', 'rgba(0, 0, 0, 0.3)');
-                        $("#sign_ok_btn").unbind();
-                    // 并设置checkbox为不可点击
-                    $(cur_check_item).removeClass('cs_checkable_label');
-                    $(cur_check_item).find('.weui-check').attr('disabled', 'disabled');
-                    $(cur_check_item).find('.weui-cell__bd').addClass('cs_unable_cell');
-                    $(cur_check_item).find('.weui-cell__bd>span').append('<span style="float:right;">已签到</span>');
-                    toast.fadeIn(1000);
-                    setTimeout(function () {
-                        toast.fadeOut(1000);
-                        window.close();
-                    }, 2000);
-                } else {
-                    toast.find('i').removeClass('weui-icon-success-no-circle').addClass('weui-icon-warn');
-                    toast.find('.weui-toast__content').text('签到失败，请重新扫码或联系主会人！');
-                    toast.fadeIn(1000);
-                    setTimeout(function () {
-                        toast.fadeOut(1000);
-                        window.close();
-                    }, 2000);
-                }
-            },
-            error: function(xmlHttpRequest, textStatus, errorThrown) {
-                alert('系统异常，请联系主会人');
-            }
-        });
-    })
+    
     </script>
 </body>
 </html>
