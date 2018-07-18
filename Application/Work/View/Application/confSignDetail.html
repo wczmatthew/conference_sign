@@ -60,6 +60,8 @@
             background-color: #ffffff;
             margin: 0px 5px;
             color: gray;
+            font-size: 12px;
+            margin: 0px 0px;
         }
         .page.flex  .placeholder.cs_nav_way_item.cs_nav_way_item_active{
             border-bottom: 3px solid #0073dd;
@@ -205,7 +207,7 @@
                                 <div class="weui-cell__ft"></div>
                             </div>
                         </div>
-                        <if condition="$merge_users eq null">
+                        <if condition="$cs_pre_users eq null">
                         <div class="weui-flex" id="cs_qdmd">
                             <div style="width:100%;text-align: center;background-color: #ebebeb;">暂无签到人员名单</div>
                         </div>
@@ -213,10 +215,24 @@
                         <div class="weui-flex" id="cs_qdmd">
                             <div style="width:100%;color: black;text-align: center;background-color: #ebebeb;">签到名单</div>
                         </div>
+                        <div class="weui-flex" id="cs_nav_way">
+                            <div class="weui-flex__item">
+                                <div class="placeholder cs_nav_way_item cs_nav_way_item_active" onclick="switch_nav_way(this, 'qdmd_div', 'qdtx_div')">总名单:100</div>
+                            </div>
+                            <div class="weui-flex__item">
+                                <div class="placeholder cs_nav_way_item"  onclick="switch_nav_way(this, 'qdtx_div', 'qdmd_div')">已签:100</div>
+                            </div>
+                            <div class="weui-flex__item">
+                                <div class="placeholder cs_nav_way_item"  onclick="switch_nav_way(this, 'qdtx_div', 'qdmd_div')">未签:100</div>
+                            </div>
+                            <div class="weui-flex__item">
+                                <div class="placeholder cs_nav_way_item"  onclick="switch_nav_way(this, 'qdtx_div', 'qdmd_div')">迟签:100</div>
+                            </div>
+                        </div>
                         <div class="weui-cells weui-cells_checkbox" id="qdmd_div" style="margin-top: 0px;">
-                            <if condition="$merge_users neq null">
+                            <if condition="$cs_pre_users neq null">
                                 <php>$i = 0;</php>
-                                <foreach name="merge_users" item="user">
+                                <foreach name="cs_pre_users" item="user">
                                 <label class="weui-cell weui-check__label cs_checkable_label" for="s{$i}">
                                     <div class="weui-cell__hd">
                                         <input type="checkbox" class="weui-check" name="cs_name" id="s{$i}" value="{$user.user_name}" <if condition="$user.sign_status gt 0">checked="checked" disabled="disabled"<else/>disabled="disabled"</if> >
