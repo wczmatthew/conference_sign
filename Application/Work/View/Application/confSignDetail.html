@@ -169,29 +169,13 @@
                                 <div class="weui-cell__ft"></div>
                             </div>
                         </div>
-                        <div class="weui-cells">
-                            <a class="weui-cell weui-cell_access" href="javascript:;">
-                                <div class="weui-cell__hd"><img src="__PUBLIC__/images/cs_reach.png" alt="" style="width:20px;margin-right:5px;display:block"></div>
-                                <div class="weui-cell__bd weui-cell_primary">
-                                    <p>与会人数:{$total_yh_cs_users}人</p>
-                                </div>
-                                <!--span class="weui-cell__ft"></span-->
-                            </a>
-                            <a class="weui-cell weui-cell_access" href="javascript:;">
-                                <div class="weui-cell__hd"><img src="__PUBLIC__/images/cs_unreach.png" alt="" style="width:20px;margin-right:5px;display:block"></div>
-                                <div class="weui-cell__bd weui-cell_primary">
-                                    <p>未与会人数:{$total_cs_users-$total_yh_cs_users}人</p>
-                                </div>
-                                <!--span class="weui-cell__ft"></span-->
-                            </a>
-                        </div>
                         <div class="weui-cells cs_item">
                             <div class="weui-cell">
                                 <div class="weui-cell__hd">
                                     <img src="__PUBLIC__/images/cs_title.png" alt style="width: 20px;margin-right: 5px;display: block;">
                                 </div>
                                 <div class="weui-cell__bd">
-                                    <p>URL(生成二维码打印，长按复制)</p>
+                                    <p>URL<span style="color: gray;font-size: 12px;">(长按全选复制,生成二维码打印)</span></p>
                                 </div>
                                 <div class="weui-cell__ft"></div>
                             </div>
@@ -207,32 +191,27 @@
                                 <div class="weui-cell__ft"></div>
                             </div>
                         </div>
-                        <if condition="$cs_pre_users eq null">
                         <div class="weui-flex" id="cs_qdmd">
-                            <div style="width:100%;text-align: center;background-color: #ebebeb;">暂无签到人员名单</div>
-                        </div>
-                        <else/>
-                        <div class="weui-flex" id="cs_qdmd">
-                            <div style="width:100%;color: black;text-align: center;background-color: #ebebeb;">签到名单</div>
+                            <div style="width:100%;color: black;text-align: center;background-color: #ebebeb;">签到统计</div>
                         </div>
                         <div class="weui-flex" id="cs_nav_way">
                             <div class="weui-flex__item">
-                                <div class="placeholder cs_nav_way_item cs_nav_way_item_active" onclick="switch_nav_way(this, 'qdmd_div', 'qdtx_div')">总名单:100</div>
+                                <div class="placeholder cs_nav_way_item cs_nav_way_item_active" onclick="switch_tj_item(this, 'total_list')">总名单:{$total_users_num}</div>
                             </div>
                             <div class="weui-flex__item">
-                                <div class="placeholder cs_nav_way_item"  onclick="switch_nav_way(this, 'qdtx_div', 'qdmd_div')">已签:100</div>
+                                <div class="placeholder cs_nav_way_item"  onclick="switch_tj_item(this, 'had_cs_list')">已签:{$had_cs_users_num}</div>
                             </div>
                             <div class="weui-flex__item">
-                                <div class="placeholder cs_nav_way_item"  onclick="switch_nav_way(this, 'qdtx_div', 'qdmd_div')">未签:100</div>
+                                <div class="placeholder cs_nav_way_item"  onclick="switch_tj_item(this, 'un_cs_list')">未签:{$un_cs_users_num}</div>
                             </div>
                             <div class="weui-flex__item">
-                                <div class="placeholder cs_nav_way_item"  onclick="switch_nav_way(this, 'qdtx_div', 'qdmd_div')">迟签:100</div>
+                                <div class="placeholder cs_nav_way_item"  onclick="switch_tj_item(this, 'late_cs_list')">迟签:{$late_cs_users_num}</div>
                             </div>
                         </div>
-                        <div class="weui-cells weui-cells_checkbox" id="qdmd_div" style="margin-top: 0px;">
-                            <if condition="$cs_pre_users neq null">
+                        <div class="weui-cells weui-cells_checkbox cs_tj_tab" id="total_list" style="margin-top: 0px;">
+                            <if condition="$total_users neq null">
                                 <php>$i = 0;</php>
-                                <foreach name="cs_pre_users" item="user">
+                                <foreach name="total_users" item="user">
                                 <label class="weui-cell weui-check__label cs_checkable_label" for="s{$i}">
                                     <div class="weui-cell__hd">
                                         <input type="checkbox" class="weui-check" name="cs_name" id="s{$i}" value="{$user.user_name}" <if condition="$user.sign_status gt 0">checked="checked" disabled="disabled"<else/>disabled="disabled"</if> >
@@ -258,7 +237,63 @@
                                 </foreach>
                             </if>
                         </div>
-                        </if>
+                        <div class="weui-cells weui-cells_checkbox cs_tj_tab" id="had_cs_list" style="margin-top: 0px;display: none;">
+                            <if condition="$had_cs_users neq null">
+                                <php>$i = 0;</php>
+                                <foreach name="had_cs_users" item="user">
+                                <label class="weui-cell weui-check__label cs_checkable_label" for="s{$i}">
+                                    <div class="weui-cell__hd">
+                                        <input type="checkbox" class="weui-check" name="cs_name" id="s{$i}" value="{$user.user_name}"checked="checked" disabled="disabled">
+                                        <i class="weui-icon-checked"></i>
+                                    </div>
+                                    <div class="weui-cell__bd cs_unable_cell">
+                                        <span>{$user.user_name}</span>
+                                        <span style="float:right;">
+                                        已签到
+                                        </span>   
+                                    </div>
+                                </label>
+                                <php>$i++;</php>
+                                </foreach>
+                            </if>
+                        </div>
+                        <div class="weui-cells weui-cells_checkbox cs_tj_tab" id="un_cs_list" style="margin-top: 0px;display: none;">
+                            <if condition="$un_cs_users neq null">
+                                <php>$i = 0;</php>
+                                <foreach name="un_cs_users" item="user">
+                                <label class="weui-cell weui-check__label cs_checkable_label" for="s{$i}">
+                                    <div class="weui-cell__hd">
+                                        <input type="checkbox" class="weui-check" name="cs_name" id="s{$i}" value="{$user.user_name}" <if condition="$user.sign_status gt 0">checked="checked" disabled="disabled"<else/>disabled="disabled"</if> >
+                                        <i class="weui-icon-cancel"></i>
+                                    </div>
+                                    <div class="weui-cell__bd">
+                                        <span>{$user.user_name}</span>   
+                                    </div>
+                                </label>
+                                <php>$i++;</php>
+                                </foreach>
+                            </if>
+                        </div>
+                        <div class="weui-cells weui-cells_checkbox cs_tj_tab" id="late_cs_list" style="margin-top: 0px;display: none;">
+                            <if condition="$late_cs_users neq null">
+                                <php>$i = 0;</php>
+                                <foreach name="late_cs_users" item="user">
+                                <label class="weui-cell weui-check__label cs_checkable_label" for="s{$i}">
+                                    <div class="weui-cell__hd">
+                                        <input type="checkbox" class="weui-check" name="cs_name" id="s{$i}" value="{$user.user_name}" checked="checked" disabled="disabled">
+                                        <i class="weui-icon-warn"></i>
+                                    </div>
+                                    <div class="weui-cell__bd">
+                                        <span>{$user.user_name}</span>  
+                                        <span style="float:right;">
+                                        {$user.sign_time|substr=0,16}
+                                        </span>   
+                                    </div>
+                                </label>
+                                <php>$i++;</php>
+                                </foreach>
+                            </if>
+                        </div>
                     </div>
                 <!--/div-->
                 <!-- toast -->
@@ -275,7 +310,14 @@
     <script src="__PUBLIC__/js/zepto.min.js"></script>
     <script src="https://res.wx.qq.com/open/libs/weuijs/1.0.0/weui.min.js"></script>
     <script type="text/javascript">
-    
+    function switch_tj_item(obj, div_id) {
+        // 切换tab
+        $(".cs_nav_way_item").removeClass('cs_nav_way_item_active');
+        $(obj).addClass('cs_nav_way_item_active');
+        // 显示对应的div
+        $(".cs_tj_tab").css('display', 'none');
+        $("#" + div_id).css('display', 'block');
+    }
     </script>
 </body>
 </html>

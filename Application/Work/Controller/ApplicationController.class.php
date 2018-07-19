@@ -96,6 +96,9 @@ class ApplicationController extends Controller {
      *  处理申请页面
      */
     public function doAddConferenceSign() {
+        \Think\Log::write("_POST =》 " . dump($_POST, false));
+        $cs_users = explode("\n",I('USER_NAMES'));
+        \Think\Log::write("cs_users =》 " . dump($cs_users, false));
         $add_res = M('conference')->add($_POST);
 
         $result = array();
@@ -104,7 +107,16 @@ class ApplicationController extends Controller {
         if($add_res) {
             $result['code']     = 1;
             $result['msg']      = '会议签到创建成功！';
+
+            // 添加人员到预 与会人员表中pre_sign_users
+            $add_users = array();
+            foreach ($cs_users as $key => $user) {
+                $add_users[] = array('CS_ID' => $add_res, 'USER_NAME' => $user);
+            }
+
+            M('pre_sign_users')->addAll($add_users);
         }
+
         echo json_encode($result);
     }
 
@@ -140,7 +152,7 @@ class ApplicationController extends Controller {
             $conf_sign_list[$key]['late_cs_total']  = $late_cs_total;
             $conf_sign_list[$key]['un_cs_total']    = $un_cs_total;
         }
-        \Think\Log::write("conf_sign_list => " . dump($conf_sign_list, false));
+        //\Think\Log::write("conf_sign_list => " . dump($conf_sign_list, false));
         $this->assign('conf_sign_list', $conf_sign_list);
         $this->display();
     }
@@ -159,24 +171,43 @@ class ApplicationController extends Controller {
         $cs_info = M('conference')->where("`CS_ID` = $cs_id")->find();
         $this->assign('cs_info', $cs_info);
 
-        $cs_pre_users = $this->getAllUsersWithStatus($cs_id);
-        $this->assign('cs_pre_users', $cs_pre_users);
-
-        // 总的参会人数
+        // 总的与会
         //$total_cs_users = M('pre_sign_users')->where("`CS_ID` = $cs_id")->count();
+        $cs_pre_users = $this->getAllUsersWithStatus($cs_id);
         $total_cs_users = count($cs_pre_users);
-        $this->assign('total_cs_users',     $total_cs_users);
-        // 与会人数
-        $total_yh_cs_users = M('sign_record')->where("`CS_ID` = '$cs_id' ")->count();
-        $this->assign('total_yh_cs_users',   $total_yh_cs_users);
+        $this->assign('total_users',        $cs_pre_users);
+        $this->assign('total_users_num',    $total_cs_users);
+
+        // 已签到
+        $had_cs_users = M('sign_record')
+            ->where("`CS_ID` = '$cs_id' AND `SIGN_STATUS` > 0")
+            ->getField('USER_NAME, USER_NAME, CS_ID, SIGN_STATUS');
+        $had_cs_users_num = count($had_cs_users);
+        $this->assign('had_cs_users',       $had_cs_users);
+        $this->assign('had_cs_users_num',   $had_cs_users_num);
+
+        // 未签到
+        $un_cs_users = array_diff_key($cs_pre_users, $had_cs_users);
+        $un_cs_users_num = count($un_cs_users);
+        $this->assign('un_cs_users',       $un_cs_users);
+        $this->assign('un_cs_users_num',   $un_cs_users_num);
+
+        // 迟签到
+        $cs_start_time = $cs_info['start_time'];
+        $late_cs_users = M('sign_record')
+            ->where("`CS_ID` = '$cs_id' AND `SIGN_STATUS` > 0 AND `SIGN_TIME` > '$cs_start_time'")
+            ->getField('USER_NAME, USER_NAME, CS_ID, SIGN_STATUS');
+        $late_cs_users_num = count($late_cs_users);
+        $this->assign('late_cs_users',       $late_cs_users);
+        $this->assign('late_cs_users_num',   $late_cs_users_num);
 
         $this->display();
     }
 
     /*
-     *  获取某一会议签到 pre_sign_users & sign_record表中的所有用户
-     *  这里也可以先将 预与会人员查出来，先全部将SIGN_STATUS 设置为0，然后与已签到表中的用户合并
      *  只允许 预与会人员名单中的用户才可以签到
+     *  ['王五'] => array('user_name' => '王五', 'cs_id' => 3, 'sign_status' => 1),
+     *  ['王柳'] => array(......)
      */
     private function getAllUsersWithStatus($cs_id) {
         // 2.查出与会人员名单
