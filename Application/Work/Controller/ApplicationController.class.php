@@ -96,11 +96,9 @@ class ApplicationController extends Controller {
      *  处理申请页面
      */
     public function doAddConferenceSign() {
-        \Think\Log::write("_POST =》 " . dump($_POST, false));
         $cs_users = explode("\n",I('USER_NAMES'));
-        \Think\Log::write("cs_users =》 " . dump($cs_users, false));
+        $_POST['CREATE_TIME'] = date('Y-m-d H:i:s', time());
         $add_res = M('conference')->add($_POST);
-
         $result = array();
         $result['code']     = 0;
         $result['msg']      = '会议签到创建失败，请检查填写内容或与管理员联系！';

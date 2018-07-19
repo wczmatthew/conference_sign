@@ -99,21 +99,22 @@
             background-color: #ffffff;
             text-align: center;
         }
+        #cs_total_statistics {
+            width:100%;
+            color: white;
+            text-align: center;
+            background-color: #0073dd;
+        }
     </style>
 </head>
 <body ontouchstart>
     <div class="container">
         <div class="page tabbar badge button flex uploader js_show">
-            <!--div class="page__bd input page__bd_spacing" style="padding: 0;">
-                <div class="weui-flex">
-                    <div class="weui-flex__item"><div class="placeholder" id="sdd_header" >Pay for</div></div>
-                </div>
-            </div-->
             <div class="page__bd input page__bd_spacing" style="height: 100%; padding: 0;">
                 <!--div class="weui-tab"-->
                     <div class="weui-tab__panel" id="panel-1">
                         <div class="weui-flex">
-                            <div class="weui-flex__item"><div class="placeholder" id="sdd_header" >会议签到详情</div></div>
+                            <div class="weui-flex__item"><div class="placeholder" id="sdd_header" >会议签到详情1</div></div>
                         </div>
                         <div class="weui-cells cs_item">
                             <div class="weui-cell">
@@ -186,13 +187,23 @@
                                     
                                 </div>
                                 <div class="weui-cell__bd">
-                                    <input class="weui-input" type="text" value="{:C('SITE_URL')}{:U('Work/Application/showSignPage', array('cs_id' => $cs_id))}">
+                                    <input class="weui-input" type="text" value="{:C('SITE_URL')}{:U('Work/Application/showSignPage', array('cs_id' => $cs_id))}" id="cs_url">
                                 </div>
                                 <div class="weui-cell__ft"></div>
                             </div>
                         </div>
+                        <!-- 二维码 -->
+                        <article class="weui-article" style="padding: 3px 0px;">
+                            <section style="margin-bottom: 0px;">
+                                    <div id="sf_qrcode_img" style="margin-left: 25%;width: 50%;">
+
+                                    </div>
+                                    <!--img src="__PUBLIC__/images/cs_qrcode.png" alt="" style="margin-left: 25%;width: 50%;"-->
+                            </section>
+                        </article>
+                        <!-- 二维码 -->
                         <div class="weui-flex" id="cs_qdmd">
-                            <div style="width:100%;color: black;text-align: center;background-color: #ebebeb;">签到统计</div>
+                            <div id="cs_total_statistics">签到统计</div>
                         </div>
                         <div class="weui-flex" id="cs_nav_way">
                             <div class="weui-flex__item">
@@ -308,6 +319,7 @@
         </div>
     </div>
     <script src="__PUBLIC__/js/zepto.min.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/qrcode.js"></script>
     <script src="https://res.wx.qq.com/open/libs/weuijs/1.0.0/weui.min.js"></script>
     <script type="text/javascript">
     function switch_tj_item(obj, div_id) {
@@ -318,6 +330,19 @@
         $(".cs_tj_tab").css('display', 'none');
         $("#" + div_id).css('display', 'block');
     }
+    $(document).ready(function(){
+        var qrcode = new QRCode(
+                    document.getElementById("sf_qrcode_img"), 
+                    {
+                         width : 270,//设置宽高
+                        height : 270
+                    }
+                );
+        var url = $('#cs_url').val();
+        console.log('url = ' + url);
+        qrcode.makeCode(url);
+        $("#sf_qrcode_img").css("display","block");
+    });
     </script>
 </body>
 </html>
