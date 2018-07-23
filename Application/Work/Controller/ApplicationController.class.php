@@ -52,14 +52,16 @@ class ApplicationController extends Controller {
         } 
 
         // 2.检查是否在名单内
-        $in_ps_user = M('pre_sign_users')->where("`CS_ID` = '$cs_id' AND `USER_NAME` = '$s_uname'")->find();
-        if(empty($in_ps_user)) {
-            $result['code'] = 3;
-            $result['msg']  = '您不在与会人员名单内';
-            echo json_encode($result);
-            exit;
+        if ($cs_info['level'] > 0) {
+            $in_ps_user = M('pre_sign_users')->where("`CS_ID` = '$cs_id' AND `USER_NAME` = '$s_uname'")->find();
+            if(empty($in_ps_user)) {
+                $result['code'] = 3;
+                $result['msg']  = '您不在与会人员名单内';
+                echo json_encode($result);
+                exit;
+            }
         }
-
+        
         // 先查询用户是否已签到
         $rec = M('sign_record')->where("`CS_ID` = '$cs_id' AND `USER_NAME` = '$s_uname'")->find();
         $result = array();
@@ -96,7 +98,12 @@ class ApplicationController extends Controller {
      *  处理申请页面
      */
     public function doAddConferenceSign() {
-        $cs_users = explode("\n",I('USER_NAMES'));
+        $cs_users = null;
+        $user_names = I('USER_NAMES');
+        if(!empty($user_names)) {
+            $cs_users = explode("\n",I('USER_NAMES'));
+        }
+        
         $_POST['CREATE_TIME'] = date('Y-m-d H:i:s', time());
         $add_res = M('conference')->add($_POST);
         $result = array();
@@ -106,13 +113,15 @@ class ApplicationController extends Controller {
             $result['code']     = 1;
             $result['msg']      = '会议签到创建成功！';
 
-            // 添加人员到预 与会人员表中pre_sign_users
-            $add_users = array();
-            foreach ($cs_users as $key => $user) {
-                $add_users[] = array('CS_ID' => $add_res, 'USER_NAME' => $user);
-            }
+            if(!empty($cs_users)) {
+                // 添加人员到预 与会人员表中pre_sign_users
+                $add_users = array();
+                foreach ($cs_users as $key => $user) {
+                    $add_users[] = array('CS_ID' => $add_res, 'USER_NAME' => $user);
+                }
 
-            M('pre_sign_users')->addAll($add_users);
+                M('pre_sign_users')->addAll($add_users);
+            }
         }
 
         echo json_encode($result);
@@ -140,7 +149,11 @@ class ApplicationController extends Controller {
 
             // 统计名单人员总数
             $condition3 = array("`CS_ID` = $cs_id");
-            $cs_total = M('pre_sign_users')->where($condition3)->count();
+            if ($cs['level'] > 0) {
+                $cs_total = M('pre_sign_users')->where($condition3)->count();
+            } else {
+                $cs_total = M('sign_record')->where($condition3)->count();
+            }
 
             // 统计未签到人员
             $un_cs_total = $cs_total - $had_cs_total;
@@ -171,6 +184,9 @@ class ApplicationController extends Controller {
 
         // 总的与会
         //$total_cs_users = M('pre_sign_users')->where("`CS_ID` = $cs_id")->count();
+        //$cs_users = M('pre_sign_users')->where("`CS_ID` = $cs_id")->select();
+        //\Think\Log::write("总与会 => " . dump($cs_users, false));
+        //\Think\Log::write("总与会人数 => " . dump($total_cs_users, false));
         $cs_pre_users = $this->getAllUsersWithStatus($cs_id);
         $total_cs_users = count($cs_pre_users);
         $this->assign('total_users',        $cs_pre_users);
@@ -210,19 +226,30 @@ class ApplicationController extends Controller {
     private function getAllUsersWithStatus($cs_id) {
         // 2.查出与会人员名单
         // 2.1 先从预 与会人查，并与已签到记录表进行匹配
-        $cs_pre_users = M('pre_sign_users')
-            ->where("`CS_ID` = '$cs_id'")
-            ->getField('USER_NAME, USER_NAME, CS_ID');
-        if(!empty($cs_pre_users)) {
-            foreach ($cs_pre_users as $key => $user) {
-                $cs_uname = $user['user_name'];
-                $sr_user = M('sign_record')->where("`CS_ID` = '$cs_id' AND `USER_NAME` = '$cs_uname'")->find();
-                if(!empty($sr_user)) {
-                    $cs_pre_users[$key]['sign_status'] =  $sr_user['sign_status'];
-                }else {
-                    $cs_pre_users[$key]['sign_status'] =  0;
+        $cs_info = $cs_info = M('conference')->where("`CS_ID` = $cs_id")->find();
+        // 有等级的会议签到
+        if ($cs_info['level'] > 0) {
+            $cs_pre_users = M('pre_sign_users')
+                ->where("`CS_ID` = '$cs_id'")
+                ->getField('USER_NAME, USER_NAME, CS_ID');
+            if(!empty($cs_pre_users)) {
+                foreach ($cs_pre_users as $key => $user) {
+                    $cs_uname = $user['user_name'];
+                    $sr_user = M('sign_record')->where("`CS_ID` = '$cs_id' AND `USER_NAME` = '$cs_uname'")->find();
+                    if(!empty($sr_user)) {
+                        $cs_pre_users[$key]['sign_status'] =  $sr_user['sign_status'];
+                    }else {
+                        $cs_pre_users[$key]['sign_status'] =  0;
+                    }
                 }
+            } else {
+                $cs_pre_users = null;
             }
+        } else {
+            // 一般会议
+            $cs_pre_users = M('sign_record')
+                ->where("`CS_ID` = '$cs_id'")
+                ->getField('USER_NAME, USER_NAME, CS_ID, SIGN_STATUS');
         }
         
         return $cs_pre_users;

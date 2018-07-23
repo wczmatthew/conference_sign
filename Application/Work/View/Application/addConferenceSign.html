@@ -268,7 +268,7 @@
             var cs_addr         = $("#cs_addr")         .val();
             var cs_host_user    = $("#cs_host_user")    .val();
             var cs_level        = '';
-            var cs_user_names   = $("#cs_user_names")   .val();
+            var cs_user_names   = $("#cs_user_names")   .val() ? null : $("#cs_user_names").val();
             $("[name='radio1']").each(function(){
                 var chk_status = $(this).prop("checked");
                 if(chk_status) {
@@ -300,11 +300,12 @@
                 showFeedMsg('主会人不能为空');
                 return false;
             }
-
+            /*
             if(cs_user_names == '') {
                 showFeedMsg('人员名单不能为空');
                 return false;
             }
+            */
 
             var $loadingToast = $('#loadingToast');
             if ($loadingToast.css('display') != 'none') return;
