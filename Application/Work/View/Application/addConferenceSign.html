@@ -209,29 +209,6 @@
                                 </div>
                             </label>
                         </div>
-                        <div class="weui-cells cs_item">
-                            <div class="weui-cell">
-                                <div class="weui-cell__hd">
-                                    <img src="__PUBLIC__/images/cs_list.png" alt style="width: 20px;margin-right: 5px;display: block;">
-                                </div>
-                                <div class="weui-cell__bd">
-                                    <p>与会人员<span style="color: gray;font-size:12px;">(每个名字后换行)</span></p>
-                                </div>
-                                <div class="weui-cell__ft"></div>
-                            </div>
-                        </div>
-                        <div class="weui-cells cs_item">
-                            <div class="weui-cell cs_layout">
-                                <div class="weui-cell__hd">
-                                    
-                                </div>
-                                <div class="weui-cell__bd">
-                                    <textarea class="weui-textarea" placeholder="请输入与会人员名单" rows="5" id="cs_user_names" wrap="hard" cols="5"></textarea>
-                                    <!--div class="weui-textarea-counter"><span>0</span>/200</div-->
-                                </div>
-                                <div class="weui-cell__ft"></div>
-                            </div>
-                        </div>
                         <div class="page__bd page__bd_spacing" id="cs_sign_ok">
                             <a href="javascript:;" class="weui-btn weui-btn_primary" id="add_cs_ok_btn">保存</a>
                         </div>
@@ -329,7 +306,7 @@
                     $loadingToast.fadeOut(100);
                     if(res.code == 1) {
                         showFeedMsg(res.msg);
-                        location.href = "{:U('Application/conferenceSignList')}";
+                        location.href = "{:U('Application/showAddCSUsersPage')}"+'?cs_id='+res.cs_id;
                     } else {
                         showFeedMsg(res.msg);
                     }
