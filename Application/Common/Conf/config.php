@@ -19,13 +19,18 @@ return array(
 	'LOAD_EXT_CONFIG'       => 'db,log', //加载config文件
 	
 	'DEFAULT_MODULE'        =>  'Work',  
-
+    'DEFAULT_CONTROLLER'    =>  'Manage', // 默认控制器名称
+    'DEFAULT_ACTION'        =>  'index', // 默认操作名称
 	
 	'LOG_ACCESS' => 'on',//访问日志 on为开启，其它为关闭
 
 	/*---------------------开始业务配置---------------------*/
 	'TITLE_NAME'					=> '会议签到',
 
+	//'SITE_URL'	=> 'http://10.1.66.25:9999',
+	'SITE_URL'		=> 'http://localhost:9999',
+
+	'APPLICATION_DIR_NAME'	=> 'Conference_Sign',
 	/*-----------会议等级---------*/
 	'CS_LEVEL' => array(
 		'一般',
