@@ -1,0 +1,158 @@
+@charset "utf-8";
+html,body,h1,h2,h3,h4,h5,h6,div,dl,dt,dd,ul,ol,li,p,blockquote,pre,hr,figure,table,caption,th,td,form,fieldset,legend,input,button,textarea,menu
+{ margin:0; padding:0; }
+article, aside, details, figcaption, figure, footer, header, hgroup, nav, section { display: block; }
+audio, canvas, video { display: inline-block; *display: inline; *zoom: 1; }
+audio:not([controls]) { display: none; }
+[hidden] { display: none; }
+html { font-size: 100%; overflow-y: scroll; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+body { margin: 0; font-size: 12px; line-height: 1.231;background-color:#fff; }
+body, button, input, select, textarea { font-family: "Microsoft YaHei",Arial,Helvetica,sans-serif; color: #333; }
+a { text-decoration:none; }
+*{font-family: "Microsoft YaHei",Arial,Helvetica,sans-serif;}
+
+abbr[title] { border-bottom: 1px dotted; }
+b, strong { font-weight: bold; }
+blockquote { margin: 1em 40px; }
+dfn { font-style: italic; }
+hr { display: block; height: 1px; border: 0; border-top: 1px solid #ccc; margin: 1em 0; padding: 0; }
+ins { background: #ff9; color: #000; text-decoration: none; }
+mark { background: #ff0; color: #000; font-style: italic; font-weight: bold; }
+
+/* 重新声明固定宽度字体系列: h5bp.com/j */
+pre, code, kbd, samp { font-family: monospace, monospace; _font-family: 'courier new', monospace; font-size: 1em; }
+/* 改善所有浏览器中预先格式化的文本的可读性 */
+pre { white-space: pre; white-space: pre-wrap; word-wrap: break-word; }
+q { quotes: none; }
+q:before, q:after { content: ""; content: none; }
+small { font-size: 85%; }
+/* 放置上标和下标内容，而不影响行高: h5bp.com/k */
+sub, sup { font-size: 75%; line-height: 0; position: relative; vertical-align: baseline; }
+sup { top: -0.5em; }
+sub { bottom: -0.25em; }
+
+
+/* =============================================================================
+   列表
+   ========================================================================== */
+ul li { list-style: none; }
+
+img { border: 0; -ms-interpolation-mode: bicubic; vertical-align: middle; }
+svg:not(:root) { overflow: hidden; }
+figure { margin: 0; }
+form { margin: 0; }
+fieldset { border: 0; margin: 0; padding: 0; }
+i{font-style:normal;}
+
+/* 指示“label”会将焦点移至相关联的表单元素 */
+label { cursor: pointer; }
+legend { border: 0; *margin-left: -7px; padding: 0; }
+button, input, select, textarea { font-size: 100%; margin: 0; vertical-align: baseline; *vertical-align: middle; }
+button, input { line-height: normal; *overflow: visible; }
+table button, table input { *overflow: auto; }
+button, input[type="button"], input[type="reset"], input[type="submit"] { cursor: pointer; -webkit-appearance: button; }
+input[type="checkbox"], input[type="radio"] { box-sizing: border-box; }
+input[type="search"] { -webkit-appearance: textfield; -moz-box-sizing: content-box; -webkit-box-sizing: content-box; box-sizing: content-box; }
+input[type="search"]::-webkit-search-decoration { -webkit-appearance: none; }
+button::-moz-focus-inner, input::-moz-focus-inner { border: 0; padding: 0; }
+textarea { overflow: auto; vertical-align: top; resize: vertical; }
+
+select { -webkit-appearance: none; border-radius: 0; /* mobile-select设置*/ }
+input[type="submit"], input[type="reset"], input[type="button"], button { -webkit-appearance: none; }
+/* 用于表单验证的颜色 */
+input:valid, textarea:valid {  }
+input:invalid, textarea:invalid { background-color: #f0dddd; }
+
+table { border-collapse: collapse; border-spacing: 0; }
+
+/* 用于图像替换 */
+.ir { display: block; border: 0; text-indent: -999em; overflow: hidden; background-color: transparent; background-repeat: no-repeat; text-align: left; direction: ltr; }
+.ir br { display: none; }
+
+/* 同时在屏幕读取器和浏览器中隐藏: h5bp.com/u */
+.hidden { display: none !important; visibility: hidden; }
+
+/* 仅可视隐藏，但在屏幕读取器中可用: h5bp.com/v */
+.visuallyhidden { border: 0; clip: rect(0 0 0 0); height: 1px; margin: -1px; overflow: hidden; padding: 0; position: absolute; width: 1px; }
+
+/* 扩展 .visuallyhidden 类以允许元素可在通过键盘浏览时成为焦点: h5bp.com/p */
+.visuallyhidden.focusable:active, .visuallyhidden.focusable:focus { clip: auto; height: auto; margin: 0; overflow: visible; position: static; width: auto; }
+
+/* 可视隐藏且在屏幕读取器中隐藏，但保留布局 */
+.invisible { visibility: hidden; }
+
+/* 包含浮动: h5bp.com/q */ 
+.clearfix:before, .clearfix:after { content: ""; display: table; }
+.clearfix:after { clear: both; }
+.clearfix { zoom: 1; }
+.clear{clear:both; height:0;overflow:hidden;}
+.fl{float:left;}
+.fr{float:right;}
+.news2_list li a:hover,
+.news2_list li a:hover img,
+.news_hot_list li a:hover,
+.solution_banner .bx-controls-direction a:hover,
+.reward_year li:hover,
+.clientele_right ul li a:hover,
+.design_list li a:hover,
+.design_pro_select > p:hover,
+.case_list li:hover a,
+.pro_subnav3_link a:hover,
+.subnav_list li:hover i,
+.clientele_nav1 a:hover,
+.news_nav1:hover i,
+.news_nav3:hover i,
+.join_way .more:hover,
+.footer_nav li a:hover i,
+.reward_year .slide a:hover,
+.partner_solution_nav li a:hover,.news_more_m,
+.search_right li .title{transition: all 0.3as ease-out 0s;-webkit-transition: all 0.3s ease-out 0s;-moz-transition:all 0.3s ease-out 0s;-o-transition: all 0.3s ease-out 0s;}
+.ellipsis,.footer_link ul li a{overflow: hidden;white-space: nowrap;text-overflow: ellipsis;}
+.solution_nav1 a:hover,
+.news_nav4:hover i,
+.clientele_join .btn:hover,
+.clientele_login .btn:hover,
+.clientele_design .btn:hover,
+.partner_hover2 .more:hover,
+.join_next:hover,
+.apply_btn:hover,
+.design_communicate .btn1:hover,
+.back1:hover,
+.news_more_m:hover{opacity:0.8;transition: all 0.3as ease-out 0s;-webkit-transition: all 0.3s ease-out 0s;-moz-transition:all 0.3s ease-out 0s;-o-transition: all 0.3s ease-out 0s;}
+.news_nav2 i a,
+.news_nav1 i a{display: block;}
+
+/* 简单流媒体
+   注意: 流媒体要求您删除 HTML 中媒体的高度和宽度属性
+   http://www.alistapart.com/articles/fluid-images/ 
+*/
+
+/* IE 6 不支持最大宽度，因此默认为 100% 宽度 */
+.ie6 img {
+	width:100%;
+}
+
+/* ==|== 打印样式 =======================================================
+   打印样式。
+   已内嵌以避免必要的 HTTP 连接: h5bp.com/r
+   ========================================================================== */
+ 
+ @media print {
+  * { background: transparent !important; color: black !important; text-shadow: none !important; filter:none !important; -ms-filter: none !important; } /* 黑白打印速度更快: h5bp.com/s */
+  a, a:visited { text-decoration: underline; }
+  a[href]:after { content: " (" attr(href) ")"; }
+  abbr[title]:after { content: " (" attr(title) ")"; }
+  .ir a:after, a[href^="javascript:"]:after, a[href^="#"]:after { content: ""; }  /* 不显示图像链接或 javascript/内部链接 */
+  pre, blockquote { border: 1px solid #999; page-break-inside: avoid; }
+  thead { display: table-header-group; } /* h5bp.com/t */
+  tr, img { page-break-inside: avoid; }
+  img { max-width: 100% !important; }
+  @page { margin: 0.5cm; }
+  p, h2, h3 { orphans: 3; widows: 3; }
+  h2, h3 { page-break-after: avoid; }
+}
+
+
+.mrgR10{margin-right:10px;}
+.mrgB50{margin-bottom:50px;}
+.mrgB40{margin-bottom:40px;}
