@@ -112,16 +112,7 @@ class ApplicationController extends Controller {
         if($add_res) {
             $result['code']     = 1;
             $result['msg']      = '会议签到创建成功！';
-
-            if(!empty($cs_users)) {
-                // 添加人员到预 与会人员表中pre_sign_users
-                $add_users = array();
-                foreach ($cs_users as $key => $user) {
-                    $add_users[] = array('CS_ID' => $add_res, 'USER_NAME' => $user);
-                }
-
-                M('pre_sign_users')->addAll($add_users);
-            }
+            $result['cs_id']    = $add_res;
         }
 
         echo json_encode($result);
@@ -149,11 +140,7 @@ class ApplicationController extends Controller {
 
             // 统计名单人员总数
             $condition3 = array("`CS_ID` = $cs_id");
-            if ($cs['level'] > 0) {
-                $cs_total = M('pre_sign_users')->where($condition3)->count();
-            } else {
-                $cs_total = M('sign_record')->where($condition3)->count();
-            }
+            $cs_total = M('pre_sign_users')->where($condition3)->count();
 
             // 统计未签到人员
             $un_cs_total = $cs_total - $had_cs_total;
@@ -183,10 +170,6 @@ class ApplicationController extends Controller {
         $this->assign('cs_info', $cs_info);
 
         // 总的与会
-        //$total_cs_users = M('pre_sign_users')->where("`CS_ID` = $cs_id")->count();
-        //$cs_users = M('pre_sign_users')->where("`CS_ID` = $cs_id")->select();
-        //\Think\Log::write("总与会 => " . dump($cs_users, false));
-        //\Think\Log::write("总与会人数 => " . dump($total_cs_users, false));
         $cs_pre_users = $this->getAllUsersWithStatus($cs_id);
         $total_cs_users = count($cs_pre_users);
         $this->assign('total_users',        $cs_pre_users);
@@ -227,32 +210,51 @@ class ApplicationController extends Controller {
         // 2.查出与会人员名单
         // 2.1 先从预 与会人查，并与已签到记录表进行匹配
         $cs_info = $cs_info = M('conference')->where("`CS_ID` = $cs_id")->find();
-        // 有等级的会议签到
-        if ($cs_info['level'] > 0) {
-            $cs_pre_users = M('pre_sign_users')
-                ->where("`CS_ID` = '$cs_id'")
-                ->getField('USER_NAME, USER_NAME, CS_ID');
-            if(!empty($cs_pre_users)) {
-                foreach ($cs_pre_users as $key => $user) {
-                    $cs_uname = $user['user_name'];
-                    $sr_user = M('sign_record')->where("`CS_ID` = '$cs_id' AND `USER_NAME` = '$cs_uname'")->find();
-                    if(!empty($sr_user)) {
-                        $cs_pre_users[$key]['sign_status'] =  $sr_user['sign_status'];
-                    }else {
-                        $cs_pre_users[$key]['sign_status'] =  0;
-                    }
+        $cs_pre_users = M('pre_sign_users')
+            ->where("`CS_ID` = '$cs_id'")
+            ->getField('USER_NAME, USER_NAME, CS_ID');
+        if(!empty($cs_pre_users)) {
+            foreach ($cs_pre_users as $key => $user) {
+                $cs_uname = $user['user_name'];
+                $sr_user = M('sign_record')->where("`CS_ID` = '$cs_id' AND `USER_NAME` = '$cs_uname'")->find();
+                if(!empty($sr_user)) {
+                    $cs_pre_users[$key]['sign_status'] =  $sr_user['sign_status'];
+                }else {
+                    $cs_pre_users[$key]['sign_status'] =  0;
                 }
-            } else {
-                $cs_pre_users = null;
             }
         } else {
-            // 一般会议
-            $cs_pre_users = M('sign_record')
-                ->where("`CS_ID` = '$cs_id'")
-                ->getField('USER_NAME, USER_NAME, CS_ID, SIGN_STATUS');
+            $cs_pre_users = null;
         }
         
         return $cs_pre_users;
+    }
+
+    /*
+     *  展示添加用户提示页
+     */
+    public function showAddCSUsersPage() {
+        $cs_id = I('cs_id');
+        // 创建动态码
+        $cs_id_char_arr = '';
+        for ($i = 1; $i <= 4; $i++) {
+            $c = chr(rand(97, 122));
+            $cs_id_char_arr[] = $c;
+        }
+        $cs_id_code = implode('', $cs_id_char_arr);
+        $cur_time = date('Y-m-d H:i:s', time());
+
+        $data = array(
+            'CS_ID'         => $cs_id,
+            'CODE'          => $cs_id_code,
+            'CREATE_TIME'   => $cur_time,
+            );
+        \Think\Log::write("data =>" . dump($data, false));
+        $res = M('conference_code')->add($data);
+
+        $this->assign('cs_id_code', $cs_id_code);
+
+        $this->display();
     }
 
     public function test() {
@@ -320,5 +322,8 @@ class ApplicationController extends Controller {
 
         $merge_users = array_merge($cs_pre_users, $sr_users);
         print_r("<br/>合并人员 => " . dump($merge_users, false));
+
+        $cs_time = strtotime('2018-07-24 18:45:23');
+        echo 'cs_time = ' . $cs_time; 
     }
 }
